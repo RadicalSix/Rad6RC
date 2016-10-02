@@ -42,8 +42,8 @@ public class AutonomousMDR extends LinearOpMode{
         waitForStart();
 
         // set Speed
-        robot.MotorR.setPower(.1);
-        robot.MotorL.setPower(.1);
+        robot.MotorR.setPower(.5);
+        robot.MotorL.setPower(.5);
 
         // run for 3 seconds
         runtime.reset();
