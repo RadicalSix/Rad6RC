@@ -47,8 +47,11 @@ public class AutonomousMDR extends LinearOpMode{
 
         // run for 3 seconds
         runtime.reset();
-        while (opModeIsActive() && colsensor.blue() < 20){
+        while (opModeIsActive())
+                //&& colsensor.blue() < 20)
+        {
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+            telemetry.addData("sensorColor:", colsensor.blue());
             telemetry.update();
             idle();
         }
