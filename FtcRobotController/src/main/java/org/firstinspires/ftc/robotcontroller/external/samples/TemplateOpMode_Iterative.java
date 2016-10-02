@@ -119,7 +119,7 @@ public class TemplateOpMode_Iterative extends OpMode
      * Code to run ONCE after the driver hits STOP
      */
     @Override
-    public void stop() {
-    }
+public void stop() {
+}
 
 }
