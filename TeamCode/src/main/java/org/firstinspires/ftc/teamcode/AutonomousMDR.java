@@ -21,7 +21,7 @@ public class AutonomousMDR extends LinearOpMode{
     public DcMotor motorR;
     public DcMotor motorL;
     private ElapsedTime runtime = new ElapsedTime();
-    public ColorSensor sensorColor;
+    public ColorSensor colsensor;
 /*
     public AutonomousMDR(){
 
@@ -31,11 +31,11 @@ public class AutonomousMDR extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
 
         robot.init(hardwareMap);
-        sensorColor = hardwareMap.colorSensor.get("sensorColor");
+        colsensor = hardwareMap.colorSensor.get("colsensor");
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
-        telemetry.addData("sensorColor:", sensorColor.blue());
+        telemetry.addData("sensorColor:", colsensor.blue());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -47,7 +47,7 @@ public class AutonomousMDR extends LinearOpMode{
 
         // run for 3 seconds
         runtime.reset();
-        while (opModeIsActive() && sensorColor.blue() < 20){
+        while (opModeIsActive() && colsensor.blue() < 20){
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
             robot.MotorR.setPower(.5);
