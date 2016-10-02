@@ -14,12 +14,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name = "autonomousJKB", group = "JKB")
 
-public class AutonomousJKB extends LinearOpMode{
+public class Auto1 extends LinearOpMode{
 
     HardwarePushbotTDR         robot   = new HardwarePushbotTDR();
     public DcMotor motorR;
     public DcMotor motorL;
     private ElapsedTime runtime = new ElapsedTime();
+
+    double vl = 0.98;
+    double vr = 1.0;
 
 /*
     public AutonomousMDR(){
@@ -31,6 +34,8 @@ public class AutonomousJKB extends LinearOpMode{
 
         robot.init(hardwareMap);
 
+        double startPosR = robot.MotorR.getCurrentPosition();
+
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
@@ -39,48 +44,22 @@ public class AutonomousJKB extends LinearOpMode{
         waitForStart();
 
         // set Speed
-        robot.MotorR.setPower(.3);
-        robot.MotorL.setPower(.3);
+        robot.MotorR.setPower(-.3*vr);
+        robot.MotorL.setPower(-.3*vl);
 
         // run for 3 seconds
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.2)) {
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+        while (robot.MotorR.getCurrentPosition() < startPosR + 3800) {
+            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.update();
-            idle();
+            //idle();
         }
 
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
 
 
-        // stop for 10 seconds
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
-            telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-            idle();
-        }
 
-        robot.MotorR.setPower(-.3);
-        robot.MotorL.setPower(-.3);
-
-        // run for 3 seconds
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.2)) {
-            telemetry.addData("Path", "Leg 3: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-            idle();
-        }
-
-        robot.MotorL.setPower(0);
-        robot.MotorR.setPower(0);
-
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);
-        idle();
 
     }
 }
