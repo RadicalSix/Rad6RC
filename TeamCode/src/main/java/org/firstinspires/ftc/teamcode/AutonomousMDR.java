@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 /**
  * Created by Troy on 10/01/16.
@@ -20,7 +21,7 @@ public class AutonomousMDR extends LinearOpMode{
     public DcMotor motorR;
     public DcMotor motorL;
     private ElapsedTime runtime = new ElapsedTime();
-
+    public ColorSensor colsensor;
 /*
     public AutonomousMDR(){
 
@@ -30,9 +31,11 @@ public class AutonomousMDR extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
 
         robot.init(hardwareMap);
+        colsensor = hardwareMap.colorSensor.get("colsensor");
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
+        telemetry.addData("sensorColor:", colsensor.blue());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -44,43 +47,19 @@ public class AutonomousMDR extends LinearOpMode{
 
         // run for 3 seconds
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
+        while (opModeIsActive() && colsensor.blue() < 10)
+        {
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+            telemetry.addData("sensorColor:", colsensor.blue());
             telemetry.update();
             idle();
         }
+
 
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
 
 
-        // stop for 10 seconds
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 10.0)) {
-            telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-            idle();
-        }
-
-        robot.MotorR.setPower(.5);
-        robot.MotorL.setPower(.5);
-
-        // run for 3 seconds
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
-            telemetry.addData("Path", "Leg 3: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-            idle();
-        }
-
-        robot.MotorL.setPower(0);
-        robot.MotorR.setPower(0);
-
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);
-        idle();
 
     }
 }

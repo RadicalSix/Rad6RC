@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -28,6 +29,7 @@ public class HardwarePushbotTDR
     /* Public OpMode members. */
     public DcMotor  MotorL   = null;
     public DcMotor  MotorR  = null;
+    public ColorSensor colsensor = null;
 // Test was good
 
  /*
@@ -56,6 +58,7 @@ public class HardwarePushbotTDR
         // Define and Initialize Motors
         MotorL   = hwMap.dcMotor.get("motorL");
         MotorR  = hwMap.dcMotor.get("motorR");
+        colsensor = hwMap.colorSensor.get("colsensor");
 /*
         armMotor    = hwMap.dcMotor.get("left_arm");
 */
