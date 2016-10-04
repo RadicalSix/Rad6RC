@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -30,6 +31,8 @@ public class HardwarePushbotTDR
     public DcMotor  MotorL   = null;
     public DcMotor  MotorR  = null;
     public ColorSensor colsensor = null;
+    public TouchSensor tsensor = null;
+
 // Test was good
 
  /*
@@ -59,6 +62,7 @@ public class HardwarePushbotTDR
         MotorL   = hwMap.dcMotor.get("motorL");
         MotorR  = hwMap.dcMotor.get("motorR");
         colsensor = hwMap.colorSensor.get("colsensor");
+        tsensor = hwMap.touchSensor.get("tsensor");
 /*
         armMotor    = hwMap.dcMotor.get("left_arm");
 */
