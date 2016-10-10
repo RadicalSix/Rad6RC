@@ -49,7 +49,7 @@ public class Auto1 extends LinearOpMode {
         waitForStart();
 
         //back into ball
-        /*step = 1;
+        step = 1;
         robot.MotorR.setPower(-.3*vr);
         robot.MotorL.setPower(-.3*vl);
         while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 3200) {
@@ -102,7 +102,7 @@ public class Auto1 extends LinearOpMode {
             telemetry.update();
             idle();
         }
-        */
+
         //forward until white line
         step = 5;
         robot.MotorR.setPower(.5 * vr);
@@ -139,7 +139,6 @@ public class Auto1 extends LinearOpMode {
             idle();
         }
         */
-
         //wait
         step = 8;
         robot.MotorL.setPower(0);
