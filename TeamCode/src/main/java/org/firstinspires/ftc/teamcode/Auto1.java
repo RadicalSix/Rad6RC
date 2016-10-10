@@ -28,6 +28,7 @@ public class Auto1 extends LinearOpMode {
     double vr = 1.0;
     int step = 0;
 
+
     /*
         public AutonomousMDR(){
 
