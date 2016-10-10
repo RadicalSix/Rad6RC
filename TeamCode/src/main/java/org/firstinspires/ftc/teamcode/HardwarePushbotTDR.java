@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
+import com.qualcomm.hardware.adafruit.AdafruitBNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -29,7 +33,11 @@ public class HardwarePushbotTDR
     /* Public OpMode members. */
     public DcMotor  MotorL   = null;
     public DcMotor  MotorR  = null;
+    public Servo pressservo = null;
     public ColorSensor colsensor = null;
+    public TouchSensor tsensor = null;
+    public ColorSensor fruitysensor = null;
+
 // Test was good
 
  /*
@@ -58,8 +66,12 @@ public class HardwarePushbotTDR
         // Define and Initialize Motors
         MotorL   = hwMap.dcMotor.get("motorL");
         MotorR  = hwMap.dcMotor.get("motorR");
+        pressservo = hwMap.servo.get("pressservo");
         colsensor = hwMap.colorSensor.get("colsensor");
-/*
+        tsensor = hwMap.touchSensor.get("tsensor");
+        fruitysensor = hwMap.colorSensor.get("fruitysensor");
+
+/*;
         armMotor    = hwMap.dcMotor.get("left_arm");
 */
         MotorL.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
