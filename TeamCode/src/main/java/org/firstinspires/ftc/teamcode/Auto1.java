@@ -81,10 +81,10 @@ public class Auto1 extends LinearOpMode {
         step = 3;
         robot.MotorL.setPower(.7*vl);
         robot.MotorR.setPower(-.7*vr);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 2700) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 270) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("startPosR + 2700 - currentPos", startPosR + 2700 - robot.MotorR.getCurrentPosition() );
+            telemetry.addData("startPosR + 2850 - currentPos", startPosR + 2700 - robot.MotorR.getCurrentPosition() );
             telemetry.update();
             //idle();
         }
