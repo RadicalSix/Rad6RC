@@ -26,6 +26,8 @@ public class VuforiaOp extends LinearOpMode{
         params.vuforiaLicenseKey = "ATVwosb/////AAAAGYlO5qoc6kZagqZX6jvBKGgVjiVqbwuCKCZeIQTBkfNwsuJY/+oa3DHJbR/aFFfPF2A/bsi9cY36hUzYuOhFVBmWjYzVbQEh3YPoVATeaQEr/P6hNDA2AbW1Xbq0+hxqiYKpA1vNu22pVPOMW7MDmDst4HiuDLEXATZC3boSoLU6d9up0qPxZbZ+3fjXMnMTr6QkXIle3O7dfg/FVM09i/CIsq/Harcgg6lCoOYnrw70TEmPXOAxYdMh6Dh2KxZ8uAfHLur0U2adA0mWUKS7+z8Axq6jlH5oY8LOXp0FqX6A820mkqeDZz5DCkupkLOuTw/taIqz4vf2ewHRB8xGt7hEu34ZOr1TWOpT0bVnLLhB";
         params.cameraMonitorFeedback = VuforiaLocalizer.Parameters.CameraMonitorFeedback.AXES;
 
+        double z = 0;
+
         VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(params);
         Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 4);
 
@@ -47,12 +49,14 @@ public class VuforiaOp extends LinearOpMode{
 
                     VectorF translation = pose.getTranslation();
 
+                   //z = translation.get(3);
+
                     telemetry.addData(beac.getName() + "-Translation", translation);
                     double degreesToTurn = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
 
                     telemetry.addData(beac.getName() + "-Degrees", degreesToTurn);
 
-
+                    telemetry.addData(beac.getName() + "-Zval", z);
                 }
             }
 
