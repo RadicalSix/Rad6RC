@@ -6,17 +6,6 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import com.vuforia.HINT;
-import com.vuforia.Vuforia;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
 /**
  * Created by Troy on 10/01/16.
   This works
@@ -24,9 +13,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 //LinearOpMode
 
-@Autonomous(name = "auto1", group = "Auto")
+@Autonomous(name = "auto1Vu", group = "Auto")
 
-public class Auto1 extends LinearOpMode {
+public class Auto1TestsVuforia extends LinearOpMode {
 
     HardwarePushbotTDR robot = new HardwarePushbotTDR();
     public DcMotor motorR;
@@ -50,7 +39,7 @@ public class Auto1 extends LinearOpMode {
         robot.init(hardwareMap);
 
         double startPosR = robot.MotorR.getCurrentPosition();
-        robot.pressservo.setPosition(0);//.01, .42
+        robot.pressservo.setPosition(.4);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -66,10 +55,10 @@ public class Auto1 extends LinearOpMode {
         step = 1;
         robot.MotorR.setPower(-.3*vr);
         robot.MotorL.setPower(-.3*vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 2600) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 3400) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("currentPos - startPosR + 2600", robot.MotorR.getCurrentPosition()-startPosR + 2600 );
+            telemetry.addData("startPosR + 3200 - currentPos", startPosR + 3400 - robot.MotorR.getCurrentPosition() );
             telemetry.update();
             //idle();
         }
@@ -92,10 +81,10 @@ public class Auto1 extends LinearOpMode {
 
         //turn towards white line, knocking ball off
         step = 3;
-        robot.MotorL.setPower(.2*vl);
-        robot.MotorR.setPower(-.2*vr);
+        robot.MotorL.setPower(.7*vl);
+        robot.MotorR.setPower(-.7*vr);
         startPosR = robot.MotorR.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 2300) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 2300) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("startPosR + 2850 - currentPos", startPosR + 2300 - robot.MotorR.getCurrentPosition() );
@@ -120,8 +109,8 @@ public class Auto1 extends LinearOpMode {
 
         //forward until white line
         step = 5;
-        robot.MotorR.setPower(.3 * vr);
-        robot.MotorL.setPower(.3 * vl);
+        robot.MotorR.setPower(.5 * vr);
+        robot.MotorL.setPower(.5 * vl);
         while (opModeIsActive() && robot.colsensor.blue() < 6) {//changed from 6 to 10 10/16
             telemetry.addData("Step:", step);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
@@ -169,7 +158,7 @@ public class Auto1 extends LinearOpMode {
         //turn to orient more towards beacon
         step = 9;
         robot.MotorR.setPower(.3 * vr);
-        robot.MotorL.setPower(-.3 * vl);
+        robot.MotorL.setPower(-.4 * vl);
         while (opModeIsActive() && robot.colsensor.blue() < 6) {//changed from 6 to 10 10/16
             telemetry.addData("Step:", step);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
@@ -207,11 +196,11 @@ public class Auto1 extends LinearOpMode {
 
             if (robot.colsensor.blue() < 6) {//grey
 
-                robot.MotorR.setPower(.3 * vr);
-                robot.MotorL.setPower(-.3 * vl);
+                robot.MotorR.setPower(.6 * vr);
+                robot.MotorL.setPower(.0 * vl);
             } else if (robot.colsensor.blue() > 6) {//white
                 robot.MotorR.setPower(.0 * vr);
-                robot.MotorL.setPower(.3 * vl);
+                robot.MotorL.setPower(.6 * vl);
             }
 
 
@@ -235,18 +224,14 @@ public class Auto1 extends LinearOpMode {
             idle();
         }
 
-        //backup
+        //press appropriate beacon button
         step = 13;
-        startPosR = robot.MotorR.getCurrentPosition();
-        runtime.reset();
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 400) {
-            robot.MotorL.setPower(-.3*vl);
-            robot.MotorR.setPower(-.3 *vr);
-            telemetry.addData("Step:", step);
-            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("sensorColor:", robot.colsensor.blue());
-            telemetry.update();
-            idle();
+        if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
+            robot.pressservo.setPosition(.9);
+
+        }
+        else {
+            robot.pressservo.setPosition(.0);
         }
 
         //wait
@@ -264,18 +249,22 @@ public class Auto1 extends LinearOpMode {
             idle();
         }
 
-        //press appropriate beacon button
+        //back up
         step = 15;
-        if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
-            robot.pressservo.setPosition(.42);
-
+        startPosR = robot.MotorR.getCurrentPosition();
+        robot.MotorR.setPower(-.3 * vr);
+        robot.MotorL.setPower(-.3 * vl);
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 650) {
+            telemetry.addData("Step:", step);
+            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
+            telemetry.addData("startPosR + 650 - currentPos", startPosR + 650 - robot.MotorR.getCurrentPosition());
+            telemetry.update();
+            idle();
         }
-        else {
-            robot.pressservo.setPosition(.88);
-        }
 
-        //wait
+        //wait, reset servo
         step = 16;
+        robot.pressservo.setPosition(.4);
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -289,17 +278,16 @@ public class Auto1 extends LinearOpMode {
             idle();
         }
 
-        //wait
+        //turn
         step = 17;
-        startPosR = robot.MotorR.getCurrentPosition();
-        runtime.reset();
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 410) {
-            robot.MotorL.setPower(.3 *vl);
-            robot.MotorR.setPower(.3 * vr);
+        robot.MotorL.setPower(-.7*vl);
+        robot.MotorR.setPower(.7*vr);
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1050) {
             telemetry.addData("Step:", step);
-            telemetry.addData("sensorColor:", robot.colsensor.blue());
+            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
+            telemetry.addData("startPosR - 1050 - currentPos", startPosR - 1050 - robot.MotorR.getCurrentPosition() );
             telemetry.update();
-            idle();
+            //idle();
         }
 
         //wait
@@ -317,64 +305,8 @@ public class Auto1 extends LinearOpMode {
             idle();
         }
 
-        //back up
-        step = 19;
-        startPosR = robot.MotorR.getCurrentPosition();
-        robot.MotorR.setPower(-.3 * vr);
-        robot.MotorL.setPower(-.3 * vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 650) {
-            telemetry.addData("Step:", step);
-            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("startPosR + 650 - currentPos", startPosR + 650 - robot.MotorR.getCurrentPosition());
-            telemetry.update();
-            idle();
-        }
-
-        //wait, reset servo
-        step = 20;
-        robot.pressservo.setPosition(.4);
-        robot.MotorL.setPower(0);
-        robot.MotorR.setPower(0);
-        startPosR = robot.MotorR.getCurrentPosition();
-        runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < .2) {
-            telemetry.addData("Step:", step);
-            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("sensorColor:", robot.colsensor.blue());
-            telemetry.update();
-            idle();
-        }
-
-        //turn
-        step = 21;
-        robot.MotorL.setPower(-.7*vl);
-        robot.MotorR.setPower(.7*vr);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1050) {
-            telemetry.addData("Step:", step);
-            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("startPosR - 1050 - currentPos", startPosR - 1050 - robot.MotorR.getCurrentPosition() );
-            telemetry.update();
-            //idle();
-        }
-
-        //wait
-        step = 22;
-        robot.MotorL.setPower(0);
-        robot.MotorR.setPower(0);
-        startPosR = robot.MotorR.getCurrentPosition();
-        runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < .2) {
-            telemetry.addData("Step:", step);
-            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("sensorColor:", robot.colsensor.blue());
-            telemetry.update();
-            idle();
-        }
-
         //forward off of white line
-        step = 23;
+        step = 19;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.3 * vr);
         robot.MotorL.setPower(.3 * vl);
@@ -387,7 +319,7 @@ public class Auto1 extends LinearOpMode {
         }
 
         //forward until next white line
-        step = 24;
+        step = 20;
         robot.MotorR.setPower(.5 * vr);
         robot.MotorL.setPower(.5 * vl);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -399,7 +331,7 @@ public class Auto1 extends LinearOpMode {
         }
 
         //wait
-        step = 25;
+        step = 21;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -414,7 +346,7 @@ public class Auto1 extends LinearOpMode {
         }
 
         //forward off of line
-        step = 26;
+        step = 22;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.3 * vr);
         robot.MotorL.setPower(.3 * vl);
@@ -427,7 +359,7 @@ public class Auto1 extends LinearOpMode {
         }
 
         //turn to orient towards beacon
-        step = 27;
+        step = 23;
         robot.MotorL.setPower(.3*vl);
         robot.MotorR.setPower(-.3*vr);
         while (opModeIsActive() && robot.colsensor.blue() < 6) {
@@ -439,7 +371,7 @@ public class Auto1 extends LinearOpMode {
         }
 
         //follow white line to the beacon
-        step = 28;
+        step = 24;
         runtime.reset();
         while (opModeIsActive() && !robot.tsensor.isPressed()) {
             telemetry.addData("Step:", step);
@@ -462,7 +394,7 @@ public class Auto1 extends LinearOpMode {
         }
 
         //press appropriate beacon button
-        step = 29;
+        step = 25;
         if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
             robot.pressservo.setPosition(.9);
 
@@ -472,7 +404,7 @@ public class Auto1 extends LinearOpMode {
         }
 
         //wait
-        step = 30;
+        step = 26;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -487,11 +419,11 @@ public class Auto1 extends LinearOpMode {
         }
 
         //back up to park on center vortex
-        step = 31;
+        step = 27;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(-.3*vr);
         robot.MotorL.setPower(-.3*vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR + 3800) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 3800) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("startPosR + 3200 - currentPos", startPosR + 3800 - robot.MotorR.getCurrentPosition() );
@@ -500,7 +432,7 @@ public class Auto1 extends LinearOpMode {
         }
 
         //wait
-        step = 32;
+        step = 28;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
