@@ -61,7 +61,7 @@ public class Auto1 extends LinearOpMode {
 
         //Oct 16- start robot with phone on/off button almost touching wall, black zip tie on beam above right motor in line with left side of floor mat ridge
 
-
+/*
         //back into ball
         step = 1;
         robot.MotorR.setPower(-.3*vr);
@@ -139,7 +139,7 @@ public class Auto1 extends LinearOpMode {
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.update();
             idle();
-        }
+        }*/
 
         //forward for a bit
         /*step = 7;
@@ -293,7 +293,7 @@ public class Auto1 extends LinearOpMode {
         step = 17;
         startPosR = robot.MotorR.getCurrentPosition();
         runtime.reset();
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 410) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 410) {
             robot.MotorL.setPower(.3 *vl);
             robot.MotorR.setPower(.3 * vr);
             telemetry.addData("Step:", step);
@@ -322,7 +322,7 @@ public class Auto1 extends LinearOpMode {
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(-.3 * vr);
         robot.MotorL.setPower(-.3 * vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 650) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 650) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("startPosR + 650 - currentPos", startPosR + 650 - robot.MotorR.getCurrentPosition());
@@ -350,7 +350,7 @@ public class Auto1 extends LinearOpMode {
         step = 21;
         robot.MotorL.setPower(-.7*vl);
         robot.MotorR.setPower(.7*vr);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1050) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1050) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("startPosR - 1050 - currentPos", startPosR - 1050 - robot.MotorR.getCurrentPosition() );
@@ -378,7 +378,7 @@ public class Auto1 extends LinearOpMode {
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.3 * vr);
         robot.MotorL.setPower(.3 * vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 800) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 800) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("startPosR - 200 - currentPos", startPosR - 800 - robot.MotorR.getCurrentPosition());
@@ -418,7 +418,7 @@ public class Auto1 extends LinearOpMode {
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.3 * vr);
         robot.MotorL.setPower(.3 * vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 170) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 170) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("startPosR - 170 - currentPos", startPosR - 170 - robot.MotorR.getCurrentPosition());
@@ -491,7 +491,7 @@ public class Auto1 extends LinearOpMode {
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(-.3*vr);
         robot.MotorL.setPower(-.3*vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR + 3800) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 3800) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("startPosR + 3200 - currentPos", startPosR + 3800 - robot.MotorR.getCurrentPosition() );
