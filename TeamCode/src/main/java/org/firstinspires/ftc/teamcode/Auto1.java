@@ -34,9 +34,10 @@ public class Auto1 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     public ColorSensor colsensor;
 
-    double vl = 0.75;
-    double vr = 1.0;
+    double vl = 1;
+    double vr = 1;//.3 from straight line
     int step = 0;
+    Boolean beaconOneRed;
 
 
     /*
@@ -116,12 +117,12 @@ public class Auto1 extends LinearOpMode {
             telemetry.addData("sensorColor:", robot.colsensor.blue());
             telemetry.update();
             idle();
-        }
+        }*/
 
         //forward until white line
         step = 5;
-        robot.MotorR.setPower(.3 * vr);
-        robot.MotorL.setPower(.3 * vl);
+        robot.MotorR.setPower(.2 * vr);
+        robot.MotorL.setPower(.2 * vl);
         while (opModeIsActive() && robot.colsensor.blue() < 6) {//changed from 6 to 10 10/16
             telemetry.addData("Step:", step);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
@@ -139,10 +140,10 @@ public class Auto1 extends LinearOpMode {
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.update();
             idle();
-        }*/
-
+        }
+/*
         //forward for a bit
-        /*step = 7;
+        step = 7;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.3 * vr);
         robot.MotorL.setPower(.3 * vl);
@@ -164,12 +165,12 @@ public class Auto1 extends LinearOpMode {
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.update();
             idle();
-        }
-*/
+        }*/
+
         //turn to orient more towards beacon
         step = 9;
-        robot.MotorR.setPower(.3 * vr);
-        robot.MotorL.setPower(-.3 * vl);
+        robot.MotorR.setPower(.4 * vr);
+        robot.MotorL.setPower(-.4 * vl);
         while (opModeIsActive() && robot.colsensor.blue() < 6) {//changed from 6 to 10 10/16
             telemetry.addData("Step:", step);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
@@ -207,11 +208,11 @@ public class Auto1 extends LinearOpMode {
 
             if (robot.colsensor.blue() < 6) {//grey
 
-                robot.MotorR.setPower(.3 * vr);
-                robot.MotorL.setPower(-.3 * vl);
+                robot.MotorR.setPower(.5 * vr);
+                robot.MotorL.setPower(-.1 * vl);
             } else if (robot.colsensor.blue() > 6) {//white
-                robot.MotorR.setPower(.0 * vr);
-                robot.MotorL.setPower(.3 * vl);
+                robot.MotorR.setPower(-.1 * vr);
+                robot.MotorL.setPower(.5 * vl);
             }
 
 
@@ -233,6 +234,15 @@ public class Auto1 extends LinearOpMode {
             telemetry.addData("sensorColor:", robot.colsensor.blue());
             telemetry.update();
             idle();
+        }
+
+        step = 15;
+        if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
+            beaconOneRed = false;
+
+        }
+        else {
+            beaconOneRed = true;
         }
 
         //backup
@@ -266,12 +276,12 @@ public class Auto1 extends LinearOpMode {
 
         //press appropriate beacon button
         step = 15;
-        if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
-            robot.pressservo.setPosition(.42);
+        if (beaconOneRed) {
+            robot.pressservo.setPosition(.88);
 
         }
         else {
-            robot.pressservo.setPosition(.88);
+            robot.pressservo.setPosition(.42);
         }
 
         //wait
@@ -332,7 +342,7 @@ public class Auto1 extends LinearOpMode {
 
         //wait, reset servo
         step = 20;
-        robot.pressservo.setPosition(.4);
+        robot.pressservo.setPosition(0);
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
