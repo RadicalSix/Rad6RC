@@ -24,7 +24,7 @@ public class TestRun extends LinearOpMode{
     public ColorSensor colsensor;
 
     double vl = 1;
-    double vr = 0.3;
+    double vr = 1;
     int step = 0;
 
 /*
@@ -48,8 +48,8 @@ public class TestRun extends LinearOpMode{
 
         //back into ball
 
-        robot.MotorR.setPower(.4*vr);
-        robot.MotorL.setPower(.4*vl);
+        robot.MotorR.setPower(.7*vr);
+        robot.MotorL.setPower(.7*vl);
         runtime.reset();
         while(opModeIsActive() && runtime.seconds() < 3){
 
@@ -63,8 +63,8 @@ public class TestRun extends LinearOpMode{
 
         }
 
-        robot.MotorR.setPower(-.4*vr);
-        robot.MotorL.setPower(-.4*vl);
+        robot.MotorR.setPower(-.7*vr);
+        robot.MotorL.setPower(-.7*vl);
         runtime.reset();
         while(opModeIsActive() && runtime.seconds() < 3){
 
