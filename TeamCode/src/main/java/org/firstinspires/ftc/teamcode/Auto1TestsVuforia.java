@@ -33,9 +33,10 @@ public class Auto1TestsVuforia extends LinearOpMode {
     public DcMotor motorL;
     private ElapsedTime runtime = new ElapsedTime();
     public ColorSensor colsensor;
+    Boolean beaconOneRed;
 
     double vl = 1;
-    double vr = 1.0;
+    double vr = 0.5;
     int step = 0;
 
 
@@ -90,7 +91,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         //Oct 16- start robot with phone on/off button almost touching wall, black zip tie on beam above right motor in line with left side of floor mat ridge
 
 
-        //back into ball
+        /*//back into ball
         step = 1;
         robot.MotorR.setPower(-.6*vr);
         robot.MotorL.setPower(-.6*vl);
@@ -185,7 +186,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
             if (z > -400){
                 done = true;
             }
-
+            telemetry.addData("done", done);
             telemetry.update();
         }
 
@@ -256,7 +257,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //forward until white line
-        step = 5;
+        step = 9;
         robot.MotorR.setPower(.5 * vr);
         robot.MotorL.setPower(.5 * vl);
         while (opModeIsActive() && robot.colsensor.blue() < 6) {//changed from 6 to 10 10/16
@@ -331,73 +332,64 @@ public class Auto1TestsVuforia extends LinearOpMode {
             idle();
         }
 
-        //follow white line until beacon
-        step = 11;
+        step = 10;
         runtime.reset();
-        while (opModeIsActive() && !robot.tsensor.isPressed()) {
+        while (opModeIsActive() && runtime.seconds() < 4) {
             telemetry.addData("Step:", step);
-            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("tsensor.isPressed()", robot.tsensor.isPressed());
-            telemetry.update();
-
             for(VuforiaTrackable beac : beacons){
                 OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beac.getListener()).getPose();
-
                 if(pose != null){
-
                     VectorF translation = pose.getTranslation();
-
-                    y = translation.get(0);
-                    //up down in terms of the pic when phone is on side
-
-                    x = translation.get(1);
-                    //left right in terms of the pic when phone is on side
-
-                    z = translation.get(2);
-                    //distance away from the pic
-
-
-
+                    y = translation.get(0);//up down in terms of the pic when phone is on side
+                    x = translation.get(1);//left right in terms of the pic when phone is on side
+                    z = translation.get(2);//distance away from the pic
                     telemetry.addData(beac.getName() + "-Translation", translation);
                     degreesToTurn = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
-
                     telemetry.addData(beac.getName() + "-Degrees", degreesToTurn);
-
                     telemetry.addData(beac.getName() + "-Zval", z);
                     telemetry.addData(beac.getName() + "-Yval", y);
                     telemetry.addData(beac.getName() + "-Xval", x);
                 }
+            }
+        }
 
+
+        //use vuforia to find beacon
+        step = 11;
+        boolean done20 = false;
+        while (opModeIsActive() && z < -200) {
+            telemetry.addData("Step:", step);
+            for(VuforiaTrackable beac : beacons){
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beac.getListener()).getPose();
+                if(pose != null){
+                    VectorF translation = pose.getTranslation();
+                    y = translation.get(0);//up down in terms of the pic when phone is on side
+                    x = translation.get(1);//left right in terms of the pic when phone is on side
+                    z = translation.get(2);//distance away from the pic
+                    telemetry.addData(beac.getName() + "-Translation", translation);
+                    degreesToTurn = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
+                    telemetry.addData(beac.getName() + "-Degrees", degreesToTurn);
+                    telemetry.addData(beac.getName() + "-Zval", z);
+                    telemetry.addData(beac.getName() + "-Yval", y);
+                    telemetry.addData(beac.getName() + "-Xval", x);
+                }
                 if (x > 0){
-                    robot.MotorL.setPower(.7 *vl);
+                    robot.MotorL.setPower(.9 *vl);
                     robot.MotorR.setPower(-.2 *vr);
                     telemetry.addData("right", x);
                 }
-                else if (x < 0){
+                if (x < 0){
                     robot.MotorL.setPower(-.2 *vl);
                     robot.MotorR.setPower(.7 *vr);
                     telemetry.addData("left", x);
                 }
+                //if(z > -200){
+                 //   done20 = true;
+                //}
+                telemetry.addData("done20", done20);
             }
-
             telemetry.update();
-
-            //camera.x
-            /*if (robot.colsensor.blue() < 6) {//grey
-
-                robot.MotorR.setPower(.6 * vr);
-                robot.MotorL.setPower(.0 * vl);
-            } else if (robot.colsensor.blue() > 6) {//white
-                robot.MotorR.setPower(.0 * vr);
-                robot.MotorL.setPower(.6 * vl);
-            }*/
-
-
-        }
-
-        robot.MotorR.setPower(0);
-        robot.MotorL.setPower(0);
+        }*/
 
         //wait
         step = 12;
@@ -405,23 +397,116 @@ public class Auto1TestsVuforia extends LinearOpMode {
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
         runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < .2) {
+        while (opModeIsActive() && runtime.seconds() < 2) {
+            telemetry.addData("Step:", step);
+            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+        step =13;
+        while(opModeIsActive()) {
+            for (VuforiaTrackable beac : beacons) {
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beac.getListener()).getPose();
+                if (pose != null) {
+                    VectorF translation = pose.getTranslation();
+                    y = translation.get(0);//up down in terms of the pic when phone is on side
+                    x = translation.get(1);//left right in terms of the pic when phone is on side
+                    z = translation.get(2);//distance away from the pic
+                    telemetry.addData(beac.getName() + "-Translation", translation);
+                    degreesToTurn = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
+                    telemetry.addData(beac.getName() + "-Degrees", degreesToTurn);
+                    telemetry.addData(beac.getName() + "-Zval", z);
+                    telemetry.addData(beac.getName() + "-Yval", y);
+                    telemetry.addData(beac.getName() + "-Xval", x);
+                }
+            }
+            if (degreesToTurn > 0 && degreesToTurn < 178) {
+                while (degreesToTurn < 178) {
+                    robot.MotorL.setPower(.7 * vl);
+                    robot.MotorR.setPower(-.7 * vr);
+                }
+            } else if (degreesToTurn < 0 && degreesToTurn > -178) {
+                while (degreesToTurn > -178) {
+                    robot.MotorL.setPower(-.7 * vl);
+                    robot.MotorR.setPower(.7 * vr);
+                }
+            }
+        }
+
+        step = 14;
+            while(opModeIsActive() && robot.tsensor.isPressed()){
+                robot.MotorL.setPower(.5 * vl);
+                robot.MotorR.setPower(.5 * vr);
+            }
+
+        //wait
+        step = 12;
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+        startPosR = robot.MotorR.getCurrentPosition();
+        runtime.reset();
+        while (opModeIsActive() && runtime.seconds() < 2) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.addData("sensorColor:", robot.colsensor.blue());
             telemetry.update();
+
+            if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
+                beaconOneRed = false;
+
+            }
+            else {
+                beaconOneRed = true;
+            }
+            idle();
+        }
+
+        //back up
+        step = 15;
+        startPosR = robot.MotorR.getCurrentPosition();
+        robot.MotorR.setPower(-.4 * vr);
+        robot.MotorL.setPower(-.4 * vl);
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 150) {
+            telemetry.addData("Step:", step);
+            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
+            telemetry.addData("currentPos - startPosR + 150", robot.MotorR.getCurrentPosition() - startPosR + 150);
+            telemetry.update();
             idle();
         }
 
         //press appropriate beacon button
-        step = 13;
-        if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
-            robot.pressservo.setPosition(.9);
+        step = 14;
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+        startPosR = robot.MotorR.getCurrentPosition();
+        runtime.reset();
+        while (opModeIsActive() && runtime.seconds() < 4) {
+            telemetry.addData("Step:", step);
+            telemetry.update();
+            if (beaconOneRed) {
+                robot.pressservo.setPosition(.88);
 
+            }
+            else {
+                robot.pressservo.setPosition(.42);
+            }
+
+            idle();
         }
-        else {
-            robot.pressservo.setPosition(.0);
+
+
+        //back up
+        step = 15;
+        startPosR = robot.MotorR.getCurrentPosition();
+        robot.MotorR.setPower(.4 * vr);
+        robot.MotorL.setPower(.4 * vl);
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 160) {
+            telemetry.addData("Step:", step);
+            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
+            telemetry.addData("currentPos - startPosR - 160", robot.MotorR.getCurrentPosition() - startPosR - 160);
+            telemetry.update();
+            idle();
         }
 
         //wait
