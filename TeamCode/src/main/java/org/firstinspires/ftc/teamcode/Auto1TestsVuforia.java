@@ -27,7 +27,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class Auto1TestsVuforia extends LinearOpMode {
 
-    HardwarePushbotTDR robot = new HardwarePushbotTDR();
+    HardwarePushbotSimple robot = new HardwarePushbotSimple();
     VuforiaOp camera = new VuforiaOp();
     public DcMotor motorR;
     public DcMotor motorL;
@@ -36,7 +36,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
     Boolean beaconOneRed;
 
     double vl = 1;
-    double vr = 0.5;
+    double vr = 1;
     int step = 0;
 
 
@@ -91,7 +91,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         //Oct 16- start robot with phone on/off button almost touching wall, black zip tie on beam above right motor in line with left side of floor mat ridge
 
 
-        /*//back into ball
+        //back into ball
         step = 1;
         robot.MotorR.setPower(-.6*vr);
         robot.MotorL.setPower(-.6*vl);
@@ -145,9 +145,10 @@ public class Auto1TestsVuforia extends LinearOpMode {
             //idle();
         }
 
-        //drive towards middle of first picture until -400 away
+        //drive towards middle of first picture until -300 away
         step = 5;
         boolean done = false;
+        boolean found = false;
         while (opModeIsActive() && !done) {
             telemetry.addData("Step:", step);
             for (VuforiaTrackable beac : beacons) {
@@ -169,24 +170,30 @@ public class Auto1TestsVuforia extends LinearOpMode {
                 }
             }
 
-            if (x > 0) {
-                robot.MotorL.setPower(.7 * vl);
-                robot.MotorR.setPower(-.2 * vr);
-                telemetry.addData("right", x);
-            } else if (x < 0) {
-                robot.MotorL.setPower(-.2 * vl);
-                robot.MotorR.setPower(.7 * vr);
-                telemetry.addData("left", x);
-            }
-            else{//didnt turn enough
-                robot.MotorL.setPower(.7 * vl);
-                robot.MotorR.setPower(-.7 * vr);
+            if(z < 0){
+                found = true;
             }
 
-            if (z > -400){
-                done = true;
+            if(found) {
+                if (x > 0) {
+                    robot.MotorL.setPower(.5 * vl);
+                    robot.MotorR.setPower(.2 * vr);
+                    telemetry.addData("right", x);
+                } else if (x < 0) {
+                    robot.MotorL.setPower(.2 * vl);
+                    robot.MotorR.setPower(.5 * vr);
+                    telemetry.addData("left", x);
+                } /*else {//didnt turn enough
+                    robot.MotorL.setPower(.7 * vl);
+                    robot.MotorR.setPower(-.7 * vr);
+                }*/
+                if (z > -500) {
+                    done = true;
+                }
             }
-            telemetry.addData("done", done);
+
+            telemetry.addData("found:", found);
+            telemetry.addData("done:", done);
             telemetry.update();
         }
 
@@ -196,7 +203,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
         runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < .2) {
+        while (opModeIsActive() && runtime.seconds() < 2) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
@@ -206,6 +213,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         //turn until square with first picture
         step = 7;
         boolean done2 = false;
+        found = false;
         while (opModeIsActive() && !done2) {
             telemetry.addData("Step:", step);
             for (VuforiaTrackable beac : beacons) {
@@ -225,17 +233,24 @@ public class Auto1TestsVuforia extends LinearOpMode {
                     telemetry.addData(beac.getName() + "-Yval", y);
                     telemetry.addData(beac.getName() + "-Xval", x);
                 }
-
-                if (degreesToTurn > -179 && degreesToTurn < -90) {
-                    robot.MotorL.setPower(-.5 * vl);
-                    robot.MotorR.setPower(.5 * vr);
-                    telemetry.addData("right", x);
-                } else if (degreesToTurn < 179 && degreesToTurn > 90) {
-                    robot.MotorL.setPower(.5 * vl);
-                    robot.MotorR.setPower(-.5 * vr);
-                    telemetry.addData("left", x);
-                }
             }
+
+                if(z < 0){
+                    found = true;
+                }
+
+                if(found) {
+                    if (degreesToTurn > -179 && degreesToTurn < -90) {
+                        robot.MotorL.setPower(-.5 * vl);
+                        robot.MotorR.setPower(.5 * vr);
+                        telemetry.addData("right", x);
+                    } else if (degreesToTurn < 179 && degreesToTurn > 90) {
+                        robot.MotorL.setPower(.5 * vl);
+                        robot.MotorR.setPower(-.5 * vr);
+                        telemetry.addData("left", x);
+                    }
+                }
+
 
             if ((degreesToTurn < -175 && degreesToTurn > -181) || (degreesToTurn > 175 && degreesToTurn < 181)){
                 done2 = true;
@@ -249,7 +264,33 @@ public class Auto1TestsVuforia extends LinearOpMode {
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
         runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 20) {
+        while (opModeIsActive() && runtime.seconds() < 1) {
+            telemetry.addData("Step:", step);
+            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
+            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+        //turn 90 degrees to right
+        step = 7;
+        startPosR = robot.MotorR.getCurrentPosition();
+        robot.MotorR.setPower(-.5 * vr);
+        robot.MotorL.setPower(.5 * vl);
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1200) {
+            telemetry.addData("Step:", step);
+            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
+            telemetry.addData("currentPos - startPosR + 1200", robot.MotorR.getCurrentPosition() - startPosR + 1200);
+            telemetry.update();
+            idle();
+        }
+
+        //wait
+        step = 8;
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+        startPosR = robot.MotorR.getCurrentPosition();
+        runtime.reset();
+        while (opModeIsActive() && runtime.seconds() < 1) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
@@ -279,40 +320,15 @@ public class Auto1TestsVuforia extends LinearOpMode {
             idle();
         }
 
-        //forward for a bit
+        //turn to orient more towards beacon
         step = 7;
         startPosR = robot.MotorR.getCurrentPosition();
-        robot.MotorR.setPower(.3 * vr);
-        robot.MotorL.setPower(.3 * vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 10) {
+        robot.MotorR.setPower(.5 * vr);
+        robot.MotorL.setPower(-.5 * vl);
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1200) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("startPosR - 10 - currentPos", startPosR - 10 - robot.MotorR.getCurrentPosition());
-            telemetry.update();
-            idle();
-        }
-
-        //wait
-        step = 8;
-        robot.MotorL.setPower(0);
-        robot.MotorR.setPower(0);
-        runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < .5) {
-            telemetry.addData("Step:", step);
-            telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.update();
-            idle();
-        }
-
-        //turn to orient more towards beacon
-        step = 9;
-        robot.MotorR.setPower(.3 * vr);
-        robot.MotorL.setPower(-.4 * vl);
-        while (opModeIsActive() && robot.colsensor.blue() < 6) {//changed from 6 to 10 10/16
-            telemetry.addData("Step:", step);
-            telemetry.addData("sensorColor:", robot.colsensor.blue());
-            telemetry.addData("motorL power:", robot.MotorL.getPower());
-            telemetry.addData("motorR power:", robot.MotorR.getPower());
+            telemetry.addData("currentPos - startPosR - 1200", robot.MotorR.getCurrentPosition() - startPosR - 1200);
             telemetry.update();
             idle();
         }
@@ -389,7 +405,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
                 telemetry.addData("done20", done20);
             }
             telemetry.update();
-        }*/
+        }
 
         //wait
         step = 12;
@@ -485,11 +501,11 @@ public class Auto1TestsVuforia extends LinearOpMode {
             telemetry.addData("Step:", step);
             telemetry.update();
             if (beaconOneRed) {
-                robot.pressservo.setPosition(.88);
+                robot.pressservo.setPosition(.93);
 
             }
             else {
-                robot.pressservo.setPosition(.42);
+                robot.pressservo.setPosition(.36);
             }
 
             idle();
