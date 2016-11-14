@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-
-import com.qualcomm.hardware.adafruit.AdafruitBNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -28,18 +24,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Servo channel:  Servo to open left claw:  "left_hand"
  * Servo channel:  Servo to open right claw: "right_hand"
  */
-public class HardwarePushbotTDR
+public class HardwarePushbotSimple
 {
     /* Public OpMode members. */
     public DcMotor  MotorL   = null;
     public DcMotor  MotorR  = null;
-    public DcMotor ShooterUp = null;
-    public DcMotor ShooterDown = null;
-    public DcMotor Conveyor = null;
-    public DcMotor Lift = null;
     public Servo pressservo = null;
-    public Servo liftservo = null;
-    public Servo shotFeeder = null;
     public ColorSensor colsensor = null;
     public TouchSensor tsensor = null;
     public ColorSensor fruitysensor = null;
@@ -60,7 +50,7 @@ public class HardwarePushbotTDR
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public HardwarePushbotTDR(){
+    public HardwarePushbotSimple(){
 
     }
 
@@ -70,18 +60,12 @@ public class HardwarePushbotTDR
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        MotorL = hwMap.dcMotor.get("MotorL");
-        MotorR = hwMap.dcMotor.get("MotorR");
-        ShooterUp = hwMap.dcMotor.get("ShooterUp");
-        ShooterDown = hwMap.dcMotor.get("ShooterDown");
-        Conveyor = hwMap.dcMotor.get("Conveyor");
-        Lift = hwMap.dcMotor.get("Lift");
-        liftservo = hwMap.servo.get("liftservo");
+        MotorL   = hwMap.dcMotor.get("motorL");
+        MotorR  = hwMap.dcMotor.get("motorR");
         pressservo = hwMap.servo.get("pressservo");
-        shotFeeder = hwMap.servo.get("shotFeeder");
-        //colsensor = hwMap.colorSensor.get("colsensor");
-        //tsensor = hwMap.touchSensor.get("tsensor");
-        //fruitysensor = hwMap.colorSensor.get("fruitysensor");
+        colsensor = hwMap.colorSensor.get("colsensor");
+        tsensor = hwMap.touchSensor.get("tsensor");
+        fruitysensor = hwMap.colorSensor.get("fruitysensor");
 
 /*;
         armMotor    = hwMap.dcMotor.get("left_arm");

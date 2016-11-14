@@ -141,7 +141,7 @@ public class Auto1 extends LinearOpMode {
             telemetry.update();
             idle();
         }
-/*
+
         //forward for a bit
         step = 7;
         startPosR = robot.MotorR.getCurrentPosition();
@@ -165,12 +165,12 @@ public class Auto1 extends LinearOpMode {
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.update();
             idle();
-        }*/
+        }
 
         //turn to orient more towards beacon
         step = 9;
-        robot.MotorR.setPower(.4 * vr);
-        robot.MotorL.setPower(-.4 * vl);
+        robot.MotorR.setPower(.6 * vr);
+        robot.MotorL.setPower(-.6 * vl);
         while (opModeIsActive() && robot.colsensor.blue() < 6) {//changed from 6 to 10 10/16
             telemetry.addData("Step:", step);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
@@ -208,11 +208,11 @@ public class Auto1 extends LinearOpMode {
 
             if (robot.colsensor.blue() < 6) {//grey
 
-                robot.MotorR.setPower(.5 * vr);
+                robot.MotorR.setPower(.7 * vr);
                 robot.MotorL.setPower(-.1 * vl);
             } else if (robot.colsensor.blue() > 6) {//white
                 robot.MotorR.setPower(-.1 * vr);
-                robot.MotorL.setPower(.5 * vl);
+                robot.MotorL.setPower(.7 * vl);
             }
 
 
