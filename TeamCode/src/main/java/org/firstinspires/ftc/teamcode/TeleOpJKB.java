@@ -25,6 +25,8 @@ public class TeleOpJKB extends OpMode{
     double vl = 1;
     double vr = 1;
     int direction = 1;
+    int shot = 0;
+    double step = 0;
 
 /*
     public AutonomousMDR(){
@@ -67,7 +69,7 @@ public class TeleOpJKB extends OpMode{
         telemetry.addData("l value:", l);
         telemetry.addData("r value:", r);
 
-        //left wheel
+        /*//left wheel
         if (l <-0.05 || l > 0.05){
             if(direction == 1){
                 robot.MotorL.setPower(l*vl*direction);
@@ -101,7 +103,7 @@ public class TeleOpJKB extends OpMode{
             else if (direction ==-1){
                 robot.MotorL.setPower(0);
             }
-        }
+        }*/
 
 
 
@@ -110,15 +112,37 @@ public class TeleOpJKB extends OpMode{
 
 
         //shooter
-        if(gamepad2.y){//on
-            robot.ShooterDown.setPower(1);
-            robot.ShooterUp.setPower(-1);
-        }
 
-        if(gamepad2.a){//off
-            robot.ShooterDown.setPower(0);
-            robot.ShooterUp.setPower(0);
+        if(gamepad2.y){//on
+            shot = 1;
         }
+        if(gamepad2.a){//off
+            shot = 0;
+        }
+        if(shot == 1){
+            if(step < 0.95){
+                step += 0.01;
+            }
+            if(step > 0.95){
+                step = 1;
+            }
+        }
+        if(shot == 0){
+            if(step > 0.05 ){
+                step -= 0.01;
+            }
+            if(step < 0.05){
+                step = 0;
+            }
+
+        }
+        robot.MotorL.setPower(step);
+        telemetry.addData("shot", shot);
+        telemetry.addData("step", step);
+        //robot.ShooterDown.setPower(step);
+        //robot.ShooterUp.setPower(-step);
+
+
         if(gamepad2.right_bumper){
             runtime.reset();
             while(runtime.seconds() < .8){
@@ -146,13 +170,16 @@ public class TeleOpJKB extends OpMode{
 
         //Lift
         double h = gamepad2.left_stick_y;
-        if(h <-0.05 || h > 0.05){
+        if(h > 0.05 || h < -0.05){
             robot.Lift.setPower(h);
         }
-
         else{
             robot.Lift.setPower(0);
         }
+
+
+
+
 
         //Liftservo up
         if(gamepad2.left_bumper){
