@@ -63,13 +63,13 @@ public class TeleOpJKB extends OpMode{
         double r;
 
 
-        l = gamepad1.left_stick_y;
-        r = gamepad1.right_stick_y;
+        l = -gamepad1.left_stick_y;
+        r = -gamepad1.right_stick_y;
 
         telemetry.addData("l value:", l);
         telemetry.addData("r value:", r);
 
-        /*//left wheel
+        //left wheel
         if (l <-0.05 || l > 0.05){
             if(direction == 1){
                 robot.MotorL.setPower(l*vl*direction);
@@ -103,7 +103,7 @@ public class TeleOpJKB extends OpMode{
             else if (direction ==-1){
                 robot.MotorL.setPower(0);
             }
-        }*/
+        }
 
 
 
@@ -136,11 +136,11 @@ public class TeleOpJKB extends OpMode{
             }
 
         }
-        robot.MotorL.setPower(step);
+
         telemetry.addData("shot", shot);
         telemetry.addData("step", step);
-        //robot.ShooterDown.setPower(step);
-        //robot.ShooterUp.setPower(-step);
+        robot.ShooterDown.setPower(step);
+        robot.ShooterUp.setPower(-step);
 
 
         if(gamepad2.right_bumper){
@@ -172,6 +172,7 @@ public class TeleOpJKB extends OpMode{
         double h = gamepad2.left_stick_y;
         if(h > 0.05 || h < -0.05){
             robot.Lift.setPower(h);
+            telemetry.addData("h", h);
         }
         else{
             robot.Lift.setPower(0);
@@ -213,6 +214,21 @@ public class TeleOpJKB extends OpMode{
 
     @Override
     public void stop() {
+        robot.pressservo.setPosition(.88);
+        //slow it down
+        boolean done3 = false;
+        while(!done3) {
+            if (step > 0.05) {
+                step -= 0.01;
+            }
+            if (step < 0.05) {
+                step = 0;
+                done3 = true;
+            }
+            telemetry.addData("step", step);
+            robot.ShooterDown.setPower(step);
+            robot.ShooterUp.setPower(-step);
+        }
     }
 
 

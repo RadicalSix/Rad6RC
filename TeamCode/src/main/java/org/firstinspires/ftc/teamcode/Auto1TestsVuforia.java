@@ -27,7 +27,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class Auto1TestsVuforia extends LinearOpMode {
 
-    HardwarePushbotSimple robot = new HardwarePushbotSimple();
+    HardwarePushbotTDR robot = new HardwarePushbotTDR();
     VuforiaOp camera = new VuforiaOp();
     public DcMotor motorR;
     public DcMotor motorL;
@@ -95,9 +95,9 @@ public class Auto1TestsVuforia extends LinearOpMode {
         step = 1;
         robot.MotorR.setPower(-.6*vr);
         robot.MotorL.setPower(-.6*vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 2000) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 3500) {
             telemetry.addData("Step:", step);
-            telemetry.addData("currentPos - startPosR + 3400", robot.MotorR.getCurrentPosition() - startPosR + 2000);
+            telemetry.addData("currentPos - startPosR + 3500", robot.MotorR.getCurrentPosition() - startPosR + 3500);
             telemetry.update();
             //idle();
         }
@@ -120,13 +120,13 @@ public class Auto1TestsVuforia extends LinearOpMode {
 
         //turn towards white line, knocking ball off
         step = 3;
-        robot.MotorL.setPower(.7*vl);
-        robot.MotorR.setPower(-.7*vr);
+        robot.MotorL.setPower(1*vl);
+        robot.MotorR.setPower(-1*vr);
         startPosR = robot.MotorR.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1200) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1600) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("currentPos - startPosR + 1200 - ", robot.MotorR.getCurrentPosition() - startPosR + 1200);
+            telemetry.addData("currentPos - startPosR + 1600 - ", robot.MotorR.getCurrentPosition() - startPosR + 1600);
             telemetry.update();
             //idle();
         }
@@ -176,18 +176,18 @@ public class Auto1TestsVuforia extends LinearOpMode {
 
             if(found) {
                 if (x > 0) {
-                    robot.MotorL.setPower(.5 * vl);
-                    robot.MotorR.setPower(.2 * vr);
+                    robot.MotorL.setPower(1 * vl);
+                    robot.MotorR.setPower(.5 * vr);
                     telemetry.addData("right", x);
                 } else if (x < 0) {
-                    robot.MotorL.setPower(.2 * vl);
-                    robot.MotorR.setPower(.5 * vr);
+                    robot.MotorL.setPower(.5 * vl);
+                    robot.MotorR.setPower(1 * vr);
                     telemetry.addData("left", x);
                 } /*else {//didnt turn enough
                     robot.MotorL.setPower(.7 * vl);
                     robot.MotorR.setPower(-.7 * vr);
                 }*/
-                if (z > -500) {
+                if (z > -300) {
                     done = true;
                 }
             }
@@ -241,18 +241,18 @@ public class Auto1TestsVuforia extends LinearOpMode {
 
                 if(found) {
                     if (degreesToTurn > -179 && degreesToTurn < -90) {
-                        robot.MotorL.setPower(-.5 * vl);
-                        robot.MotorR.setPower(.5 * vr);
-                        telemetry.addData("right", x);
+                        robot.MotorL.setPower(-1 * vl);
+                        robot.MotorR.setPower(1 * vr);
+                        telemetry.addData("right", degreesToTurn);
                     } else if (degreesToTurn < 179 && degreesToTurn > 90) {
-                        robot.MotorL.setPower(.5 * vl);
-                        robot.MotorR.setPower(-.5 * vr);
-                        telemetry.addData("left", x);
+                        robot.MotorL.setPower(1 * vl);
+                        robot.MotorR.setPower(-1 * vr);
+                        telemetry.addData("left", degreesToTurn);
                     }
                 }
 
 
-            if ((degreesToTurn < -175 && degreesToTurn > -181) || (degreesToTurn > 175 && degreesToTurn < 181)){
+            if ((degreesToTurn < -170 && degreesToTurn > -181) || (degreesToTurn > 170 && degreesToTurn < 181)){
                 done2 = true;
             }
             telemetry.update();
@@ -272,20 +272,20 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //turn 90 degrees to right
-        step = 7;
+        step = 9;
         startPosR = robot.MotorR.getCurrentPosition();
-        robot.MotorR.setPower(-.5 * vr);
-        robot.MotorL.setPower(.5 * vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1200) {
+        robot.MotorR.setPower(-1 * vr);
+        robot.MotorL.setPower(1 * vl);
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1700) {
             telemetry.addData("Step:", step);
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("currentPos - startPosR + 1200", robot.MotorR.getCurrentPosition() - startPosR + 1200);
+            telemetry.addData("currentPos - startPosR + 1700", robot.MotorR.getCurrentPosition() - startPosR + 1700);
             telemetry.update();
             idle();
         }
 
         //wait
-        step = 8;
+        step = 10;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -298,9 +298,9 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //forward until white line
-        step = 9;
-        robot.MotorR.setPower(.5 * vr);
-        robot.MotorL.setPower(.5 * vl);
+        step = 11;
+        robot.MotorR.setPower(.7 * vr);
+        robot.MotorL.setPower(.7 * vl);
         while (opModeIsActive() && robot.colsensor.blue() < 6) {//changed from 6 to 10 10/16
             telemetry.addData("Step:", step);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
@@ -308,7 +308,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
             idle();
         }
         //wait
-        step = 6;
+        step = 12;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -321,7 +321,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //turn to orient more towards beacon
-        step = 7;
+        step = 13;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.5 * vr);
         robot.MotorL.setPower(-.5 * vl);
@@ -334,7 +334,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 10;
+        step = 14;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -348,7 +348,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
             idle();
         }
 
-        step = 10;
+        step = 15;
         runtime.reset();
         while (opModeIsActive() && runtime.seconds() < 4) {
             telemetry.addData("Step:", step);
@@ -371,7 +371,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
 
 
         //use vuforia to find beacon
-        step = 11;
+        step = 16;
         boolean done20 = false;
         while (opModeIsActive() && z < -200) {
             telemetry.addData("Step:", step);
@@ -408,7 +408,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 12;
+        step = 17;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
