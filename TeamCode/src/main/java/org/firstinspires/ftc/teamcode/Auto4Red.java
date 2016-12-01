@@ -62,6 +62,8 @@ public class Auto4Red extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
+        //shoot first ball then move servo so it can help hold up the ball
+
         status = "Start, move servo";
         /*telemetry.addData("Status:", status);
         telemetry.update();
