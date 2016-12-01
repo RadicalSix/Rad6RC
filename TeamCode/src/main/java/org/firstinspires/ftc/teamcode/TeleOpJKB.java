@@ -27,6 +27,9 @@ public class TeleOpJKB extends OpMode{
     int direction = 1;
     int shot = 0;
     double step = 0;
+    double shotspeed = 1;
+    double startPosR;
+    boolean backdone = false;
 
 /*
     public AutonomousMDR(){
@@ -37,9 +40,10 @@ public class TeleOpJKB extends OpMode{
     public void init() {
 
         robot.init(hardwareMap);
-        robot.liftservo.setPosition(1);
+        robot.liftservo.setPosition(.0);
         robot.shotFeeder.setPosition(.9);
         robot.pressservo.setPosition(0);
+        robot.conveyorservo.setPosition(0);//in
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -113,6 +117,20 @@ public class TeleOpJKB extends OpMode{
 
         //shooter
 
+        if(gamepad1.a){
+            shotspeed = 1;
+        }
+        if(gamepad1.b){
+            shotspeed = .6;
+        }
+        if(gamepad1.y){
+            shotspeed = .5;
+        }
+        if(gamepad1.x){
+            shotspeed = .45;
+        }
+
+
         if(gamepad2.y){//on
             shot = 1;
         }
@@ -120,11 +138,11 @@ public class TeleOpJKB extends OpMode{
             shot = 0;
         }
         if(shot == 1){
-            if(step < 0.95){
-                step += 0.01;
+            if(step < (shotspeed - 0.05)){
+                step += 0.02;
             }
-            if(step > 0.95){
-                step = 1;
+            if(step > (shotspeed - 0.05)){
+                step = shotspeed;
             }
         }
         if(shot == 0){
@@ -139,6 +157,7 @@ public class TeleOpJKB extends OpMode{
 
         telemetry.addData("shot", shot);
         telemetry.addData("step", step);
+        telemetry.addData("shotspeed", shotspeed);
         robot.ShooterDown.setPower(step);
         robot.ShooterUp.setPower(-step);
 
@@ -151,7 +170,21 @@ public class TeleOpJKB extends OpMode{
             robot.shotFeeder.setPosition(.9);
         }
 
-
+        if(gamepad1.dpad_down){
+            startPosR = robot.MotorR.getCurrentPosition();
+            backdone = false;
+            while((robot.MotorR.getCurrentPosition() > startPosR - 2000) && !backdone){
+                robot.MotorR.setPower(vr*.4);
+                robot.MotorL.setPower(vr*.4);
+                telemetry.addData("encoder units left", robot.MotorR.getCurrentPosition() - startPosR + 2000);
+                telemetry.update();
+                if(gamepad1.dpad_up){
+                    backdone = true;
+                }
+            }
+            robot.MotorR.setPower(0);
+            robot.MotorL.setPower(0);
+        }
 
 
 
@@ -162,6 +195,13 @@ public class TeleOpJKB extends OpMode{
 
         else{
             robot.Conveyor.setPower(0);
+        }
+
+        if(gamepad2.x){
+            robot.conveyorservo.setPosition(1);//out
+        }
+        if(gamepad2.b){
+            robot.conveyorservo.setPosition(0);//in
         }
 
 
@@ -184,10 +224,10 @@ public class TeleOpJKB extends OpMode{
 
         //Liftservo up
         if(gamepad2.left_bumper){
-            robot.liftservo.setPosition(0);
+            robot.liftservo.setPosition(.56);
         }
         if(gamepad2.left_trigger > .5){
-            robot.liftservo.setPosition(1);
+            robot.liftservo.setPosition(.03);
         }
 
 
@@ -214,7 +254,7 @@ public class TeleOpJKB extends OpMode{
 
     @Override
     public void stop() {
-        robot.pressservo.setPosition(.88);
+        /*robot.pressservo.setPosition(.88);
         //slow it down
         boolean done3 = false;
         while(!done3) {
@@ -228,7 +268,7 @@ public class TeleOpJKB extends OpMode{
             telemetry.addData("step", step);
             robot.ShooterDown.setPower(step);
             robot.ShooterUp.setPower(-step);
-        }
+        }*/
     }
 
 

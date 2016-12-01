@@ -32,7 +32,6 @@ public class Auto1 extends LinearOpMode {
     public DcMotor motorR;
     public DcMotor motorL;
     private ElapsedTime runtime = new ElapsedTime();
-    public ColorSensor colsensor;
 
     double vl = 1;
     double vr = 1;//.3 from straight line
@@ -51,7 +50,10 @@ public class Auto1 extends LinearOpMode {
         robot.init(hardwareMap);
 
         double startPosR = robot.MotorR.getCurrentPosition();
-        robot.pressservo.setPosition(0);//.01, .42
+        robot.liftservo.setPosition(1);
+        robot.shotFeeder.setPosition(.9);
+        robot.pressservo.setPosition(0);
+        robot.conveyorservo.setPosition(0);//in
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -60,9 +62,12 @@ public class Auto1 extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
+        telemetry.addData("Start", step);
+        telemetry.update();
+
         //Oct 16- start robot with phone on/off button almost touching wall, black zip tie on beam above right motor in line with left side of floor mat ridge
 
-/*
+
         //back into ball
         step = 1;
         robot.MotorR.setPower(-.3*vr);
@@ -117,7 +122,7 @@ public class Auto1 extends LinearOpMode {
             telemetry.addData("sensorColor:", robot.colsensor.blue());
             telemetry.update();
             idle();
-        }*/
+        }
 
         //forward until white line
         step = 5;

@@ -54,6 +54,8 @@ public class Info extends LinearOpMode {
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
             telemetry.addData("currentPosPressservo", robot.pressservo.getPosition());
             telemetry.addData("colsensor, blue:", robot.colsensor.blue());
+            telemetry.addData("colsensor, green:", robot.colsensor.green());
+            telemetry.addData("colsensor, red:", robot.colsensor.red());
             telemetry.addData("fruitysensor, blue:", robot.fruitysensor.blue());
             telemetry.addData("fruitysensor, red:", robot.fruitysensor.red());
             telemetry.addData("fruitysensor, green:", robot.fruitysensor.green());
