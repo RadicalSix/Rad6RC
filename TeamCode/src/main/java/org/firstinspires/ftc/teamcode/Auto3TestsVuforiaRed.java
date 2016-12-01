@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.vuforia.HINT;
 import com.vuforia.Vuforia;
@@ -23,21 +21,20 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 //LinearOpMode
 
-@Autonomous(name = "auto1TestsVuforia", group = "Auto")
+@Autonomous(name = "auto3TestsVuforiaRed", group = "Auto")
 
-public class Auto1TestsVuforia extends LinearOpMode {
+public class Auto3TestsVuforiaRed extends LinearOpMode {
 
     HardwarePushbotTDR robot = new HardwarePushbotTDR();
     VuforiaOp camera = new VuforiaOp();
-    public DcMotor motorR;
-    public DcMotor motorL;
     private ElapsedTime runtime = new ElapsedTime();
-    public ColorSensor colsensor;
     Boolean beaconOneRed;
 
     double vl = 1;
     double vr = 1;
     int step = 0;
+    double shot = 0;
+    String status = "Start";
 
 
     /*
@@ -74,7 +71,10 @@ public class Auto1TestsVuforia extends LinearOpMode {
         robot.init(hardwareMap);
 
         double startPosR = robot.MotorR.getCurrentPosition();
-        robot.pressservo.setPosition(0);
+        robot.liftservo.setPosition(.03);
+        robot.shotFeeder.setPosition(.9);
+        robot.pressservo.setPosition(.0);
+        robot.conveyorservo.setPosition(0);//in
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");
@@ -84,27 +84,321 @@ public class Auto1TestsVuforia extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
+        status = "Start, move servo";
+        telemetry.addData("Status:", status);
+        telemetry.update();
+        robot.pressservo.setPosition(.36);
+
+        status = "start shooter";
+        shot = 0;
+        while(opModeIsActive() && shot < 0.45) {
+            shot += 0.02;
+            robot.ShooterDown.setPower(shot);
+            robot.ShooterUp.setPower(-shot);
+            telemetry.addData("shot", shot);
+            telemetry.addData("Status:", status);
+            telemetry.update();
+        }
+
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 0.1) {
+            shot = .45;
+            robot.ShooterDown.setPower(shot);
+            robot.ShooterUp.setPower(-shot);
+            telemetry.addData("shot", shot);
+            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+            telemetry.addData("Status:", status);
+            telemetry.update();
+        }
+
+        status = "shoot first ball";
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 1.5) {
+            shot = .45;
+            robot.shotFeeder.setPosition(0);
+            robot.ShooterDown.setPower(shot);
+            robot.ShooterUp.setPower(-shot);
+            telemetry.addData("shot", shot);
+            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+            telemetry.addData("Status:", status);
+            telemetry.update();
+        }
+
+        status = "feed second ball";
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 1){
+            shot = .45;
+            robot.shotFeeder.setPosition(.9);
+            robot.Conveyor.setPower(.7);
+            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+            telemetry.addData("Status:", status);
+            telemetry.update();
+        }
+
+        status = "shoot second ball";
+        robot.Conveyor.setPower(0);
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 2.5) {
+            shot = .45;
+            robot.shotFeeder.setPosition(0);
+            robot.ShooterDown.setPower(shot);
+            robot.ShooterUp.setPower(-shot);
+            telemetry.addData("shot", shot);
+            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+            telemetry.addData("Status:", status);
+            telemetry.update();
+        }
+
+        while(opModeIsActive() && shot > 0.05) {
+            shot -= 0.01;
+            robot.shotFeeder.setPosition(.9);
+            robot.ShooterDown.setPower(shot);
+            robot.ShooterUp.setPower(-shot);
+            telemetry.addData("shot", shot);
+            telemetry.addData("Status:", status);
+            telemetry.update();
+        }
+
+        status = "drive off wall";
+        startPosR = robot.MotorR.getCurrentPosition();while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1300) {
+            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR - 1300);
+            telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition());
+            telemetry.addData("Status:", status);
+            telemetry.update();
+            robot.MotorL.setPower(vl * -.5);
+            robot.MotorR.setPower(vr * -.5);
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "turn to white line";
+        startPosR = robot.MotorR.getCurrentPosition();
+        while(opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1300){
+            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR + 1300);
+            telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition());
+            telemetry.addData("Status:", status);
+            telemetry.update();
+            robot.MotorL.setPower(vl * .5);
+            robot.MotorR.setPower(vr * -.5);
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "drive until white line";
+        while (opModeIsActive() && robot.colsensor.blue() < 8) {//changed from 6 to 10 10/16
+            robot.MotorR.setPower(.7 * vr);
+            robot.MotorL.setPower(.7 * vl);
+            telemetry.addData("sensorColor:", robot.colsensor.blue());
+            telemetry.addData("Status:", status);
+            telemetry.update();
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "turn towards beacon";
+        telemetry.update();
+        startPosR = robot.MotorR.getCurrentPosition();
+        while(opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 600){
+            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR - 600);
+            telemetry.addData("Status:", status);
+            telemetry.update();
+            robot.MotorL.setPower(vl * -.5);
+            robot.MotorR.setPower(vr * .5);
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "drive to picture until z = -200";
+        telemetry.update();
+        boolean done = false;
+        boolean found = false;
+        while (opModeIsActive() && !done) {
+            for (VuforiaTrackable beac : beacons) {
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beac.getListener()).getPose();
+                if (pose != null) {
+                    VectorF translation = pose.getTranslation();
+                    y = translation.get(0);
+                    //up down in terms of the pic when phone is on side
+                    x = translation.get(1);
+                    //left right in terms of the pic when phone is on side
+                    z = translation.get(2);
+                    //distance away from the pic
+                    telemetry.addData(beac.getName() + "-Translation", translation);
+                    degreesToTurn = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
+                    telemetry.addData(beac.getName() + "-Degrees", degreesToTurn);
+                    telemetry.addData(beac.getName() + "-Zval", z);
+                    telemetry.addData(beac.getName() + "-Yval", y);
+                    telemetry.addData(beac.getName() + "-Xval", x);
+                }
+            }
+            if(z < 0){
+                found = true;
+            }
+            if(found) {
+                if (x > 0) {
+                    robot.MotorL.setPower(1 * vl);
+                    robot.MotorR.setPower(.5 * vr);
+                    telemetry.addData("right", x);
+                } else if (x < 0) {
+                    robot.MotorL.setPower(.5 * vl);
+                    robot.MotorR.setPower(1 * vr);
+                    telemetry.addData("left", x);
+                } /*else {//didnt turn enough
+                    robot.MotorL.setPower(.7 * vl);
+                    robot.MotorR.setPower(-.7 * vr);
+                }*/
+                if (z > -200) {
+                    done = true;
+                }
+            }
+
+            status = "turn until square with beacon";
+            telemetry.update();
+            boolean done2 = false;
+            found = false;
+            while (opModeIsActive() && !done2) {
+                for (VuforiaTrackable beac : beacons) {
+                    OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beac.getListener()).getPose();
+                    if (pose != null) {
+                        VectorF translation = pose.getTranslation();
+                        y = translation.get(0);
+                        //up down in terms of the pic when phone is on side
+                        x = translation.get(1);
+                        //left right in terms of the pic when phone is on side
+                        z = translation.get(2);
+                        //distance away from the pic
+                        telemetry.addData(beac.getName() + "-Translation", translation);
+                        degreesToTurn = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
+                        telemetry.addData(beac.getName() + "-Degrees", degreesToTurn);
+                        telemetry.addData(beac.getName() + "-Zval", z);
+                        telemetry.addData(beac.getName() + "-Yval", y);
+                        telemetry.addData(beac.getName() + "-Xval", x);
+                    }
+                }
+                if(z < 0){
+                    found = true;
+                }
+                if(found) {
+                    if (degreesToTurn > -179 && degreesToTurn < -90) {
+                        robot.MotorL.setPower(-1 * vl);
+                        robot.MotorR.setPower(1 * vr);
+                        telemetry.addData("right", degreesToTurn);
+                    } else if (degreesToTurn < 179 && degreesToTurn > 90) {
+                        robot.MotorL.setPower(1 * vl);
+                        robot.MotorR.setPower(-1 * vr);
+                        telemetry.addData("left", degreesToTurn);
+                    }
+                }
+                if ((degreesToTurn < -170 && degreesToTurn > -181) || (degreesToTurn > 170 && degreesToTurn < 181)){
+                    done2 = true;
+                }
+                telemetry.update();
+            }
+
+            status = "drive until touch sensor pressed";
+            telemetry.update();
+            robot.MotorR.setPower(.7 * vr);
+            robot.MotorL.setPower(.7 * vl);
+            while (opModeIsActive() && robot.tsensor.isPressed()) {//changed from 6 to 10 10/16
+                telemetry.addData("tsensor pressed:", robot.tsensor.isPressed());
+                telemetry.update();
+            }
+
+            status = "sense color";
+            telemetry.update();
+            robot.MotorL.setPower(0);
+            robot.MotorR.setPower(0);
+            startPosR = robot.MotorR.getCurrentPosition();
+            runtime.reset();
+            while (opModeIsActive() && runtime.seconds() < 1) {
+                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+                telemetry.addData("sensorColor:", robot.colsensor.blue());
+                telemetry.update();
+                if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
+                    beaconOneRed = false;
+
+                }
+                else {
+                    beaconOneRed = true;
+                }
+            }
+
+            status = "back up";
+            telemetry.update();
+            startPosR = robot.MotorR.getCurrentPosition();
+            robot.MotorR.setPower(-.4 * vr);
+            robot.MotorL.setPower(-.4 * vl);
+            while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 150) {
+                telemetry.addData("currentPos - startPosR + 150", robot.MotorR.getCurrentPosition() - startPosR + 150);
+                telemetry.update();
+            }
+
+            status = "drive and press beacon";
+            telemetry.update();
+            robot.MotorL.setPower(0);
+            robot.MotorR.setPower(0);
+            startPosR = robot.MotorR.getCurrentPosition();
+            runtime.reset();
+            while (opModeIsActive() && runtime.seconds() < 4) {
+                telemetry.update();
+                if (beaconOneRed) {
+                    robot.pressservo.setPosition(.93);
+                }
+                else {
+                    robot.pressservo.setPosition(.36);
+                }
+            }
+
+            status = "back up";
+            telemetry.update();
+            startPosR = robot.MotorR.getCurrentPosition();
+            robot.MotorR.setPower(-.4 * vr);
+            robot.MotorL.setPower(-.4 * vl);
+            while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 400) {
+                telemetry.addData("currentPos - startPosR + 400", robot.MotorR.getCurrentPosition() - startPosR + 400);
+                telemetry.update();
+            }
 
 
 
 
-        //Oct 16- start robot with phone on/off button almost touching wall, black zip tie on beam above right motor in line with left side of floor mat ridge
 
 
-        //back into ball
-        step = 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+            //back into ball
+        step = 2;
         robot.MotorR.setPower(-.6*vr);
         robot.MotorL.setPower(-.6*vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 3500) {
+        shot = 0;
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 2000) {
+        robot.ShooterDown.setPower(shot);
+        robot.ShooterUp.setPower(-shot);
             telemetry.addData("Step:", step);
-            telemetry.addData("currentPos - startPosR + 3500", robot.MotorR.getCurrentPosition() - startPosR + 3500);
+            telemetry.addData("currentPos - startPosR + 2000", robot.MotorR.getCurrentPosition() - startPosR + 2000);
             telemetry.update();
             //idle();
         }
 
 
         //wait
-        step = 2;
+        step = 3;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -119,7 +413,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
 
 
         //turn towards white line, knocking ball off
-        step = 3;
+        step = 4;
         robot.MotorL.setPower(1*vl);
         robot.MotorR.setPower(-1*vr);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -132,7 +426,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 4;
+        step = 5;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -146,7 +440,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //drive towards middle of first picture until -300 away
-        step = 5;
+        step = 6;
         boolean done = false;
         boolean found = false;
         while (opModeIsActive() && !done) {
@@ -186,7 +480,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
                 } /*else {//didnt turn enough
                     robot.MotorL.setPower(.7 * vl);
                     robot.MotorR.setPower(-.7 * vr);
-                }*/
+                }
                 if (z > -300) {
                     done = true;
                 }
@@ -198,7 +492,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 6;
+        step = 7;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -211,7 +505,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //turn until square with first picture
-        step = 7;
+        step = 8;
         boolean done2 = false;
         found = false;
         while (opModeIsActive() && !done2) {
@@ -259,7 +553,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 8;
+        step = 9;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -272,7 +566,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //turn 90 degrees to right
-        step = 9;
+        step = 10;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(-1 * vr);
         robot.MotorL.setPower(1 * vl);
@@ -285,7 +579,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 10;
+        step = 11;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -298,7 +592,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //forward until white line
-        step = 11;
+        step = 12;
         robot.MotorR.setPower(.7 * vr);
         robot.MotorL.setPower(.7 * vl);
         while (opModeIsActive() && robot.colsensor.blue() < 6) {//changed from 6 to 10 10/16
@@ -308,7 +602,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
             idle();
         }
         //wait
-        step = 12;
+        step = 13;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -321,7 +615,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //turn to orient more towards beacon
-        step = 13;
+        step = 14;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.5 * vr);
         robot.MotorL.setPower(-.5 * vl);
@@ -334,7 +628,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 14;
+        step = 15;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -348,7 +642,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
             idle();
         }
 
-        step = 15;
+        step = 16;
         runtime.reset();
         while (opModeIsActive() && runtime.seconds() < 4) {
             telemetry.addData("Step:", step);
@@ -371,7 +665,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
 
 
         //use vuforia to find beacon
-        step = 16;
+        step = 17;
         boolean done20 = false;
         while (opModeIsActive() && z < -200) {
             telemetry.addData("Step:", step);
@@ -408,7 +702,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 17;
+        step = 18;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -419,7 +713,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
             telemetry.update();
         }
 
-        step =13;
+        step =19;
         while(opModeIsActive()) {
             for (VuforiaTrackable beac : beacons) {
                 OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beac.getListener()).getPose();
@@ -449,14 +743,14 @@ public class Auto1TestsVuforia extends LinearOpMode {
             }
         }
 
-        step = 14;
+        step = 20;
             while(opModeIsActive() && robot.tsensor.isPressed()){
                 robot.MotorL.setPower(.5 * vl);
                 robot.MotorR.setPower(.5 * vr);
             }
 
         //wait
-        step = 12;
+        step = 21;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -479,7 +773,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //back up
-        step = 15;
+        step = 22;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(-.4 * vr);
         robot.MotorL.setPower(-.4 * vl);
@@ -492,7 +786,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //press appropriate beacon button
-        step = 14;
+        step = 23;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -513,7 +807,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
 
 
         //back up
-        step = 15;
+        step = 24;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.4 * vr);
         robot.MotorL.setPower(.4 * vl);
@@ -526,7 +820,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 14;
+        step = 25;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -541,7 +835,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //back up
-        step = 15;
+        step = 26;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(-.3 * vr);
         robot.MotorL.setPower(-.3 * vl);
@@ -554,7 +848,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait, reset servo
-        step = 16;
+        step = 27;
         robot.pressservo.setPosition(.4);
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
@@ -570,7 +864,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //turn
-        step = 17;
+        step = 28;
         robot.MotorL.setPower(-.7*vl);
         robot.MotorR.setPower(.7*vr);
         while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1050) {
@@ -582,7 +876,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 18;
+        step = 29;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -597,7 +891,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //forward off of white line
-        step = 19;
+        step = 30;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.3 * vr);
         robot.MotorL.setPower(.3 * vl);
@@ -610,7 +904,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //forward until next white line
-        step = 20;
+        step = 31;
         robot.MotorR.setPower(.5 * vr);
         robot.MotorL.setPower(.5 * vl);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -622,7 +916,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 21;
+        step = 32;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -637,7 +931,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //forward off of line
-        step = 22;
+        step = 33;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.3 * vr);
         robot.MotorL.setPower(.3 * vl);
@@ -650,7 +944,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //turn to orient towards beacon
-        step = 23;
+        step = 34;
         robot.MotorL.setPower(.3*vl);
         robot.MotorR.setPower(-.3*vr);
         while (opModeIsActive() && robot.colsensor.blue() < 6) {
@@ -662,7 +956,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //follow white line to the beacon
-        step = 24;
+        step = 35;
         runtime.reset();
         while (opModeIsActive() && !robot.tsensor.isPressed()) {
             telemetry.addData("Step:", step);
@@ -685,7 +979,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //press appropriate beacon button
-        step = 25;
+        step = 36;
         if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
             robot.pressservo.setPosition(.9);
 
@@ -695,7 +989,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 26;
+        step = 37;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -710,7 +1004,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //back up to park on center vortex
-        step = 27;
+        step = 38;
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(-.3*vr);
         robot.MotorL.setPower(-.3*vl);
@@ -723,7 +1017,7 @@ public class Auto1TestsVuforia extends LinearOpMode {
         }
 
         //wait
-        step = 28;
+        step = 39;
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -735,6 +1029,11 @@ public class Auto1TestsVuforia extends LinearOpMode {
             telemetry.addData("sensorColor:", robot.colsensor.blue());
             telemetry.update();
             idle();
+            */
         }
+
+
     }
 }
+
+

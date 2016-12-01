@@ -18,14 +18,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class TestRun extends LinearOpMode{
 
     HardwarePushbotTDR         robot   = new HardwarePushbotTDR();
-    public DcMotor motorR;
-    public DcMotor motorL;
     private ElapsedTime runtime = new ElapsedTime();
-    public ColorSensor colsensor;
 
     double vl = 1;
     double vr = 0.5;
-    int step = 0;
 
 /*
     public AutonomousMDR(){
@@ -45,6 +41,9 @@ public class TestRun extends LinearOpMode{
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+
+        telemetry.addData("Start", 0);
+        telemetry.update();
 
         //back into ball
 
