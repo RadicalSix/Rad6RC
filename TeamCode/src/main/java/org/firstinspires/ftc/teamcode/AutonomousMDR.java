@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  */
 //LinearOpMode
 
-@Autonomous(name = "autonomousMDR", group = "MDR")
+//@Autonomous(name = "autonomousMDR", group = "MDR")
 
 public class AutonomousMDR extends LinearOpMode{
 

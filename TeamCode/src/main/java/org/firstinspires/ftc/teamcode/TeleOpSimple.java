@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 //LinearOpMode
 
-@TeleOp(name = "TeleOpSimple", group = "JKB")
+//@TeleOp(name = "TeleOpSimple", group = "JKB")
 
 public class TeleOpSimple extends OpMode{
 

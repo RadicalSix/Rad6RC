@@ -118,16 +118,16 @@ public class TeleOpJKB extends OpMode{
         //shooter
 
         if(gamepad1.a){
-            shotspeed = 1;
-        }
-        if(gamepad1.b){
-            shotspeed = .6;
-        }
-        if(gamepad1.y){
             shotspeed = .5;
         }
+        if(gamepad1.b){
+            shotspeed = .44;
+        }
+        if(gamepad1.y){
+            shotspeed = .37;
+        }
         if(gamepad1.x){
-            shotspeed = .45;
+            shotspeed = .3;
         }
 
 
@@ -209,7 +209,7 @@ public class TeleOpJKB extends OpMode{
 
 
         //Lift
-        double h = gamepad2.left_stick_y;
+        double h = -gamepad2.left_stick_y;
         if(h > 0.05 || h < -0.05){
             robot.Lift.setPower(h);
             telemetry.addData("h", h);
