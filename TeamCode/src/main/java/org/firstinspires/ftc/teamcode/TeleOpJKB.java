@@ -66,14 +66,14 @@ public class TeleOpJKB extends OpMode{
 
 
         if(gamepad1.right_stick_button){
-            direction = 1;//forward to push buttons
+            direction = -1;//forward to push buttons
             telemetry.addData("Buttons Direction", direction);
         }
 
 
 
         if(gamepad1.left_stick_button){
-            direction = -1;//forward to shoot
+            direction = 1;//forward to shoot, lift
             telemetry.addData("Lift Direction", direction);
         }
 
@@ -218,9 +218,9 @@ public class TeleOpJKB extends OpMode{
 
         //Lift
         double h = -gamepad2.left_stick_y;
-        if(h > 0.05 || h < -0.05 && (robot.liftservo.getPosition() == .81)){
+        telemetry.addData("h", h);
+        if(((h > 0.05) || (h < -0.05)) && (robot.liftservo.getPosition() == .95)){
             robot.Lift.setPower(h);
-            telemetry.addData("h", h);
         }
         else{
             robot.Lift.setPower(0);
@@ -232,7 +232,7 @@ public class TeleOpJKB extends OpMode{
 
         //Liftservo up
         if(gamepad2.left_bumper){
-            robot.liftservo.setPosition(.81);
+            robot.liftservo.setPosition(.95);
         }
         if(gamepad2.left_trigger > .5){
             robot.liftservo.setPosition(.25);//down
