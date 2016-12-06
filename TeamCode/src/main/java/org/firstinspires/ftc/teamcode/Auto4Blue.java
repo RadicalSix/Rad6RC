@@ -29,7 +29,7 @@ public class Auto4Blue extends LinearOpMode {
 
     double vl = 1;//change for direction and battery
     double vr = 1;//change for direction and battery
-    double shotSpeed = .31;//change for battery
+    double shotSpeed = .37;//change for battery
     int step = 0;
     double shot = 0;
     double lastPosR = 0;
@@ -52,7 +52,7 @@ public class Auto4Blue extends LinearOpMode {
         robot.init(hardwareMap);
 
         double startPosR = robot.MotorR.getCurrentPosition();
-        robot.liftservo.setPosition(.0);
+        robot.liftservo.setPosition(.25);
         robot.shotFeeder.setPosition(.9);
         robot.conveyorservo.setPosition(0);//in
         robot.pressservo.setPosition(0);
@@ -107,11 +107,27 @@ public class Auto4Blue extends LinearOpMode {
             telemetry.update();
         }
 
+        status = "inch off wall";
+        startPosR = robot.MotorR.getCurrentPosition();
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 100) {
+            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR - 100);
+            telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition());
+            telemetry.addData("Status:", status);
+            telemetry.update();
+            robot.pressservo.setPosition(.36);
+            robot.MotorL.setPower(vl * -.5);
+            robot.MotorR.setPower(vr * -.5);
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
         status = "feed second ball";
         runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 2){
-            robot.pressservo.setPosition(.36);
+        while(opModeIsActive() && runtime.seconds() < 1.3){
             robot.shotFeeder.setPosition(.9);
+            shot = shotSpeed;
+            robot.ShooterDown.setPower(shot);
+            robot.ShooterUp.setPower(-shot);
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.addData("Status:", status);
             telemetry.update();
@@ -143,8 +159,8 @@ public class Auto4Blue extends LinearOpMode {
 
         status = "drive off wall";
         startPosR = robot.MotorR.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1300) {
-            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR - 1300);
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1200) {
+            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR - 1200);
             telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition());
             telemetry.addData("Status:", status);
             telemetry.update();
@@ -156,8 +172,8 @@ public class Auto4Blue extends LinearOpMode {
 
         status = "turn to white line";
         startPosR = robot.MotorR.getCurrentPosition();
-        while(opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1200){
-            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR - 1200);
+        while(opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1840){
+            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR - 1840);
             telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition());
             telemetry.addData("Status:", status);
             telemetry.update();
@@ -169,7 +185,7 @@ public class Auto4Blue extends LinearOpMode {
 
         startPosR = robot.MotorR.getCurrentPosition();
         status = "drive until white line";
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 3000 && !doneDrive1) {//stop if hit line or go certain distance
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 2525 && !doneDrive1) {//stop if hit line or go certain distance
             if(robot.colsensor.blue() > 8){
                 doneDrive1 = true;//hit white line
             }
@@ -188,9 +204,9 @@ public class Auto4Blue extends LinearOpMode {
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(.3 * vr);
         robot.MotorL.setPower(.3 * vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 650 && !doneDrive1) {//skips this step if didn't hit line
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 750 && !doneDrive1) {//skips this step if didn't hit line
             telemetry.addData("Status:", status);
-            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR + 650);
+            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR + 750);
             telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition());
             telemetry.update();
             idle();
@@ -212,11 +228,11 @@ public class Auto4Blue extends LinearOpMode {
             telemetry.addData("tsensor.isPressed()", robot.tsensor.isPressed());
             telemetry.update();
             if (robot.colsensor.blue() > 6) {//white
-                robot.MotorR.setPower(.45 * vr);
-                robot.MotorL.setPower(-.25 * vl);
+                robot.MotorR.setPower(.4 * vr);
+                robot.MotorL.setPower(-.2 * vl);
             } else if (robot.colsensor.blue() < 6) {//grey
-                robot.MotorR.setPower(-.25 * vr);
-                robot.MotorL.setPower(.45 * vl);
+                robot.MotorR.setPower(-.2 * vr);
+                robot.MotorL.setPower(.4 * vl);
             }
         }
 
@@ -243,9 +259,9 @@ public class Auto4Blue extends LinearOpMode {
             startPosR = robot.MotorR.getCurrentPosition();
             robot.MotorR.setPower(-.7 * vr);
             robot.MotorL.setPower(-.7 * vl);
-            while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 225) {
+            while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 300) {
                 telemetry.addData("Status:", status);
-                telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition() - startPosR - 225);
+                telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition() - startPosR - 300);
                 telemetry.update();
             }
 
@@ -268,7 +284,7 @@ public class Auto4Blue extends LinearOpMode {
 
             status = "forward and press buttons";
             startPosR = robot.MotorR.getCurrentPosition();
-            while (opModeIsActive() && (robot.MotorR.getCurrentPosition() > startPosR - 330) && !beaconOneDone) {
+            while (opModeIsActive() && (robot.MotorR.getCurrentPosition() > startPosR - 350) && !beaconOneDone) {
                 if (beaconOneBlue) {
                     robot.MotorR.setPower(.3 * vr);
                     robot.MotorL.setPower(.7 * vl);
@@ -308,11 +324,11 @@ public class Auto4Blue extends LinearOpMode {
         status = "turn to second beacon";
         telemetry.update();
         startPosR = robot.MotorR.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 700) {
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 800) {
             robot.MotorR.setPower(.5 * vr);
             robot.MotorL.setPower(-.5 * vl);
             telemetry.addData("Status:", status);
-            telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition() - startPosR - 700);
+            telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition() - startPosR - 800);
             telemetry.update();
         }
         robot.MotorR.setPower(0);

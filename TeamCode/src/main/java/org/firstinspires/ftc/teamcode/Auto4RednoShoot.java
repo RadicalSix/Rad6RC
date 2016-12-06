@@ -3,16 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.vuforia.HINT;
-import com.vuforia.Vuforia;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
 
@@ -21,9 +11,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 //LinearOpMode
 
-@Autonomous(name = "auto4Red", group = "Auto")
+@Autonomous(name = "auto4RedNoShoot", group = "Auto")
 
-public class Auto4Red extends LinearOpMode {
+public class Auto4RednoShoot extends LinearOpMode {
 
     HardwarePushbotTDR robot = new HardwarePushbotTDR();
     VuforiaOp camera = new VuforiaOp();
@@ -82,75 +72,6 @@ public class Auto4Red extends LinearOpMode {
         telemetry.update();
 
 
-        status = "start shooter";
-        shot = 0;
-        while(opModeIsActive() && shot < shotSpeed) {
-            shot += 0.02;
-            robot.ShooterDown.setPower(shot);
-            robot.ShooterUp.setPower(-shot);
-            telemetry.addData("shot", shot);
-            telemetry.addData("Status:", status);
-            telemetry.update();
-        }
-
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 0.5) {
-            shot = shotSpeed;
-            robot.ShooterDown.setPower(shot);
-            robot.ShooterUp.setPower(-shot);
-            telemetry.addData("shot", shot);
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Status:", status);
-            telemetry.update();
-        }
-
-        status = "shoot first ball";
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 1.5) {
-            shot = shotSpeed;
-            robot.shotFeeder.setPosition(0);
-            robot.ShooterDown.setPower(shot);
-            robot.ShooterUp.setPower(-shot);
-            telemetry.addData("shot", shot);
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Status:", status);
-            telemetry.update();
-        }
-
-        status = "feed second ball";
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 2){
-            robot.pressservo.setPosition(.36);
-            robot.shotFeeder.setPosition(.9);
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Status:", status);
-            telemetry.update();
-        }
-
-        status = "shoot second ball";
-        robot.Conveyor.setPower(0);
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 2.5) {
-            shot = shotSpeed;
-            robot.shotFeeder.setPosition(0);
-            robot.ShooterDown.setPower(shot);
-            robot.ShooterUp.setPower(-shot);
-            telemetry.addData("shot", shot);
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Status:", status);
-            telemetry.update();
-        }
-
-        while(opModeIsActive() && shot > 0.05) {
-            shot -= 0.01;
-            robot.shotFeeder.setPosition(.9);
-            robot.ShooterDown.setPower(shot);
-            robot.ShooterUp.setPower(-shot);
-            telemetry.addData("shot", shot);
-            telemetry.addData("Status:", status);
-            telemetry.update();
-        }
-
         status = "drive off wall";
         startPosR = robot.MotorR.getCurrentPosition();
         while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1300) {
@@ -166,8 +87,8 @@ public class Auto4Red extends LinearOpMode {
 
         status = "turn to white line";
         startPosR = robot.MotorR.getCurrentPosition();
-        while(opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1290){
-            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR + 1290);
+        while(opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 1200){
+            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR + 1200);
             telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition());
             telemetry.addData("Status:", status);
             telemetry.update();
@@ -177,9 +98,10 @@ public class Auto4Red extends LinearOpMode {
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
 
+        //made it longer
         startPosR = robot.MotorR.getCurrentPosition();
         status = "drive until white line";
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 2700 && !doneDrive1) {//stop if hit line or go certain distance
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 4000 && !doneDrive1) {//stop if hit line or go certain distance
             if(robot.colsensor.blue() > 8){
                 doneDrive1 = true;//hit white line
             }
@@ -187,7 +109,7 @@ public class Auto4Red extends LinearOpMode {
             robot.MotorL.setPower(.55 * vl);
             robot.pressservo.setPosition(0);
             telemetry.addData("Status:", status);
-            telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition()- startPosR);
+            telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition()- startPosR + 4000);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
             telemetry.update();
         }
@@ -222,11 +144,11 @@ public class Auto4Red extends LinearOpMode {
             telemetry.addData("tsensor.isPressed()", robot.tsensor.isPressed());
             telemetry.update();
             if (robot.colsensor.blue() < 6) {//grey
-                robot.MotorR.setPower(.4 * vr);
-                robot.MotorL.setPower(-.2 * vl);
+                robot.MotorR.setPower(.45 * vr);
+                robot.MotorL.setPower(-.25 * vl);
             } else if (robot.colsensor.blue() > 6) {//white
-                robot.MotorR.setPower(-.2 * vr);
-                robot.MotorL.setPower(.4 * vl);
+                robot.MotorR.setPower(-.25 * vr);
+                robot.MotorL.setPower(.45 * vl);
             }
         }
 
