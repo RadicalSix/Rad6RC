@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 //LinearOpMode
 
-@Autonomous(name = "autonomousTDR", group = "TDR")
+//@Autonomous(name = "autonomousTDR", group = "TDR")
 
 public class AutonomousTDR extends LinearOpMode{
 

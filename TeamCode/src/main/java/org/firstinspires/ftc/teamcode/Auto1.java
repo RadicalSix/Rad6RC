@@ -24,7 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 //LinearOpMode
 
-@Autonomous(name = "auto1", group = "Auto")
+//@Autonomous(name = "auto1", group = "Auto")
 
 public class Auto1 extends LinearOpMode {
 
