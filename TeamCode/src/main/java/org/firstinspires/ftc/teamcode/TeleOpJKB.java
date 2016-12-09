@@ -90,10 +90,10 @@ public class TeleOpJKB extends OpMode{
         //left wheel
         if (l <-0.05 || l > 0.05){
             if(direction == 1){
-                robot.MotorL.setPower(l*vl*direction*reduceSpeed);
+                robot.MotorR.setPower(l*vr*direction*reduceSpeed);
             }
             else if (direction ==-1){
-                robot.MotorR.setPower(l*vr*direction*reduceSpeed);
+                robot.MotorL.setPower(l*vl*direction*reduceSpeed);
             }
         }
         else{
@@ -108,10 +108,10 @@ public class TeleOpJKB extends OpMode{
         //right wheel
         if (r <-0.05 || r > 0.05){
             if(direction == 1){
-                robot.MotorR.setPower(r*vr*direction*reduceSpeed);
+                robot.MotorL.setPower(r*vl*direction*reduceSpeed);
             }
             else if (direction ==-1){
-                robot.MotorL.setPower(r*vl*direction*reduceSpeed);
+                robot.MotorR.setPower(r*vr*direction*reduceSpeed);
             }
         }
         else {
