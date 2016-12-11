@@ -39,7 +39,7 @@ public class Auto4Red extends LinearOpMode {
 
     double vl = 1;//change for direction and battery
     double vr = 1;//change for direction and battery
-    double shotSpeed = .31;//change for battery
+    double shotSpeed = .39;//change for battery
     int step = 0;
     double shot = 0;
     double lastPosR = 0;
@@ -166,8 +166,8 @@ public class Auto4Red extends LinearOpMode {
 
         status = "turn to white line";
         startPosR = robot.MotorR.getCurrentPosition();
-        while(opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1290){
-            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR - 1290);
+        while(opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1500){
+            telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR - 1500);
             telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition());
             telemetry.addData("Status:", status);
             telemetry.update();
@@ -179,7 +179,7 @@ public class Auto4Red extends LinearOpMode {
 
         startPosR = robot.MotorR.getCurrentPosition();
         status = "drive back until white line";
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 2700 && !doneDrive1) {//stop if hit line or go certain distance
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 2800 && !doneDrive1) {//stop if hit line or go certain distance
             if(robot.colsensor.blue() > 8){
                 doneDrive1 = true;//hit white line
             }
@@ -207,8 +207,8 @@ public class Auto4Red extends LinearOpMode {
         }
 
         status = "turn until white line";
-        robot.MotorR.setPower(.33 * vr);
-        robot.MotorL.setPower(-.33 * vl);
+        robot.MotorR.setPower(-.33 * vr);
+        robot.MotorL.setPower(.33 * vl);
         while (opModeIsActive() && robot.colsensor.blue() < 8) {
             telemetry.addData("Status:", status);
             telemetry.update();
@@ -318,11 +318,11 @@ public class Auto4Red extends LinearOpMode {
         status = "turn to beacon 2";
         telemetry.update();
         startPosR = robot.MotorR.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 700) {
-            robot.MotorR.setPower(-.5 * vr);
-            robot.MotorL.setPower(.5 * vl);
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 1100) {
+            robot.MotorR.setPower(.5 * vr);
+            robot.MotorL.setPower(-.5 * vl);
             telemetry.addData("Status:", status);
-            telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition() - startPosR + 700);
+            telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition() - startPosR + 1100);
             telemetry.update();
         }
         robot.MotorR.setPower(0);
@@ -344,7 +344,7 @@ public class Auto4Red extends LinearOpMode {
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
 
-        status = "backward past line";
+        /* status = "backward past line";
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(-.3 * vr);
         robot.MotorL.setPower(-.3 * vl);
@@ -363,7 +363,7 @@ public class Auto4Red extends LinearOpMode {
             telemetry.update();
             lastPosR = robot.MotorR.getCurrentPosition();
         }
-
+*/
         status = "turn until white line";
         robot.MotorR.setPower(-.4 * vr);
         robot.MotorL.setPower(.4 * vl);
@@ -393,10 +393,10 @@ public class Auto4Red extends LinearOpMode {
             telemetry.addData("Status:", status);
             telemetry.addData("tsensor.isPressed()", robot.tsensor.isPressed());
             telemetry.update();
-            if (robot.colsensor.blue() < 6) {//grey
+            if (robot.colsensor.blue() > 6) {//grey
                 robot.MotorR.setPower(.25 * vr);
                 robot.MotorL.setPower(-.5 * vl);
-            } else if (robot.colsensor.blue() > 6) {//white
+            } else if (robot.colsensor.blue() < 6) {//white
                 robot.MotorR.setPower(-.5 * vr);
                 robot.MotorL.setPower(.25 * vl);
             }
