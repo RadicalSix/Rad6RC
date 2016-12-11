@@ -36,6 +36,7 @@ public class Auto4Red extends LinearOpMode {
     Boolean forwardTwoDone = false;
     Boolean turnTwoDone = false;
     Boolean longDriveDone = false;
+    Boolean followOneDone = false;
 
     double vl = 1;//change for direction and battery
     double vr = 1;//change for direction and battery
@@ -43,10 +44,12 @@ public class Auto4Red extends LinearOpMode {
     int step = 0;
     double shot = 0;
     double lastPosR = 0;
+    double twoLastPosR = 0;
     int beaconOneCount = 0;
     int BeaconTwoCount = 0;
     int forwardTwoCount = 0;
     int turnTwoCount = 0;
+    int followOneCount = 0;
     String status = "Start";
 
 
@@ -216,7 +219,10 @@ public class Auto4Red extends LinearOpMode {
         }
 
         status = "line follow";
+        startPosR = robot.MotorR.getCurrentPosition();
         runtime.reset();
+        lastPosR = 0;
+        twoLastPosR = 0;
         while (opModeIsActive() && !robot.tsensor.isPressed()) {
             telemetry.addData("Status:", status);
             telemetry.addData("tsensor.isPressed()", robot.tsensor.isPressed());
@@ -227,6 +233,18 @@ public class Auto4Red extends LinearOpMode {
             } else if (robot.colsensor.blue() > 8) {//white
                 robot.MotorR.setPower(-.4 * vr);
                 robot.MotorL.setPower(.2 * vl);
+            }
+            twoLastPosR = lastPosR;
+            lastPosR = robot.MotorR.getCurrentPosition();
+            if(Math.abs(twoLastPosR - robot.MotorR.getCurrentPosition()) < 5)//motor encoder only changed by five, should be net increase in R
+            {
+                followOneCount ++;
+            }
+            //need a way to check every other and put follow count back to 0 if has moved
+            if(followOneCount > 2){//hasn't really moved two times in a row
+                robot.MotorR.setPower(-.4 * vr);
+                robot.MotorL.setPower(-.4 * vl);
+                followOneCount = 0;
             }
         }
 
