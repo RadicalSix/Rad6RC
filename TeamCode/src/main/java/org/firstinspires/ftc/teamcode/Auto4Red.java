@@ -38,6 +38,7 @@ public class Auto4Red extends LinearOpMode {
     Boolean longDriveDone = false;
     Boolean followOneDone = false;
 
+
     double vl = 1;//change for direction and battery
     double vr = 1;//change for direction and battery
     double shotSpeed = .39;//change for battery
@@ -50,6 +51,7 @@ public class Auto4Red extends LinearOpMode {
     int forwardTwoCount = 0;
     int turnTwoCount = 0;
     int followOneCount = 0;
+    int turnOneCount = 0;
     String status = "Start";
 
 
@@ -80,7 +82,7 @@ public class Auto4Red extends LinearOpMode {
 
         //shoot first ball then move servo so it can help hold up the ball
 
-        status = "Start, move servo";
+        /*status = "Start, move servo";
         telemetry.addData("Status:", status);
         telemetry.update();
 
@@ -178,7 +180,7 @@ public class Auto4Red extends LinearOpMode {
             robot.MotorR.setPower(vr * .5);
         }
         robot.MotorL.setPower(0);
-        robot.MotorR.setPower(0);
+        robot.MotorR.setPower(0);*/
 
         startPosR = robot.MotorR.getCurrentPosition();
         status = "drive back until white line";
@@ -201,7 +203,7 @@ public class Auto4Red extends LinearOpMode {
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(-.3 * vr);
         robot.MotorL.setPower(-.3 * vl);
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 650 && !doneDrive1) {//skips this step if didn't hit line
+        while (opModeIsActive() && (robot.MotorR.getCurrentPosition() > startPosR - 650) && doneDrive1) {//only does this step if hit white line
             telemetry.addData("Status:", status);
             telemetry.addData("MotorR units to go", robot.MotorR.getCurrentPosition() - startPosR + 650);
             telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition());
@@ -210,18 +212,47 @@ public class Auto4Red extends LinearOpMode {
         }
 
         status = "turn until white line";
-        robot.MotorR.setPower(-.33 * vr);
-        robot.MotorL.setPower(.33 * vl);
+        runtime.reset();
+        turnOneCount = 0;
+        lastPosR = robot.MotorR.getCurrentPosition();
         while (opModeIsActive() && robot.colsensor.blue() < 8) {
             telemetry.addData("Status:", status);
             telemetry.update();
-            idle();
+            robot.MotorR.setPower(-.33 * vr);
+            robot.MotorL.setPower(.33 * vl);
+            /*if(lastPosR == robot.MotorR.getCurrentPosition()) {
+                turnOneCount++;
+            }
+            else if(lastPosR != robot.MotorR.getCurrentPosition()) {
+                turnOneCount = 0;
+            }
+            if(turnOneCount > 25){
+                while(robot.MotorR.getCurrentPosition() < startPosR + 70) {
+                    robot.MotorR.setPower(.25);
+                    robot.MotorL.setPower(.25);
+                }
+                turnOneCount = 0;
+            }*/
+            if(runtime.seconds() > 1){
+                if(lastPosR == robot.MotorR.getCurrentPosition()){
+                    while((robot.MotorR.getCurrentPosition() < (startPosR + 600)) && robot.colsensor.blue() < 8) {
+                        robot.MotorR.setPower(.5);
+                        robot.MotorL.setPower(.5);
+                    }
+                }
+                lastPosR = robot.MotorR.getCurrentPosition();
+                runtime.reset();
+            }
+            //lastPosR = robot.MotorR.getCurrentPosition();
+            telemetry.addData("lastPosR", lastPosR);
+            telemetry.addData("current", robot.MotorR.getCurrentPosition());
+            telemetry.addData("turnOneCount",turnOneCount);
         }
 
         status = "line follow";
         startPosR = robot.MotorR.getCurrentPosition();
         runtime.reset();
-        lastPosR = 0;
+        lastPosR = robot.MotorR.getCurrentPosition();
         twoLastPosR = 0;
         while (opModeIsActive() && !robot.tsensor.isPressed()) {
             telemetry.addData("Status:", status);
@@ -234,18 +265,35 @@ public class Auto4Red extends LinearOpMode {
                 robot.MotorR.setPower(-.4 * vr);
                 robot.MotorL.setPower(.2 * vl);
             }
-            twoLastPosR = lastPosR;
-            lastPosR = robot.MotorR.getCurrentPosition();
-            if(Math.abs(twoLastPosR - robot.MotorR.getCurrentPosition()) < 5)//motor encoder only changed by five, should be net increase in R
-            {
+            if(runtime.seconds()> 3){
+                telemetry.addData("Status:", "Stuck");
+                if(Math.abs(lastPosR - robot.MotorR.getCurrentPosition()) < 10){
+                    if(robot.colsensor.blue() > 8){
+                        startPosR = robot.MotorR.getCurrentPosition();
+                        while(robot.MotorR.getCurrentPosition() < (startPosR + 100 + (followOneCount * 50))) {
+                            robot.MotorR.setPower(.5);
+                            robot.MotorL.setPower(.25);
+                        }
+                        robot.MotorR.setPower(0);
+                        robot.MotorL.setPower(0);
+                    }
+                    else if(robot.colsensor.blue() < 8){
+                        startPosR = robot.MotorR.getCurrentPosition();
+                        while(robot.MotorR.getCurrentPosition() < (startPosR + 250 + (followOneCount * 50))) {
+                            robot.MotorR.setPower(.25);
+                            robot.MotorL.setPower(.5);
+                        }
+                        robot.MotorR.setPower(0);
+                        robot.MotorL.setPower(0);
+                    }
+                }
+                runtime.reset();
+                lastPosR = robot.MotorR.getCurrentPosition();
                 followOneCount ++;
             }
-            //need a way to check every other and put follow count back to 0 if has moved
-            if(followOneCount > 2){//hasn't really moved two times in a row
-                robot.MotorR.setPower(-.4 * vr);
-                robot.MotorL.setPower(-.4 * vl);
-                followOneCount = 0;
-            }
+            telemetry.addData("Time", runtime.seconds());
+            telemetry.addData(" Change in last and current", Math.abs(lastPosR - robot.MotorR.getCurrentPosition()));
+            telemetry.addData("followOneCount", followOneCount);
         }
 
         status = "sense color";
@@ -305,7 +353,7 @@ public class Auto4Red extends LinearOpMode {
                     robot.MotorR.setPower(-.3 * vr);
                     robot.MotorL.setPower(-.7 * vl);
                 }
-               /* if(lastPosR == robot.MotorR.getCurrentPosition()){
+                /*if(lastPosR == robot.MotorR.getCurrentPosition()){
                     beaconOneCount++;
                 }
                 if(beaconOneCount > 10){
@@ -362,7 +410,7 @@ public class Auto4Red extends LinearOpMode {
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
 
-        /* status = "backward past line";
+        status = "backward past line";
         startPosR = robot.MotorR.getCurrentPosition();
         robot.MotorR.setPower(-.3 * vr);
         robot.MotorL.setPower(-.3 * vl);
@@ -381,7 +429,7 @@ public class Auto4Red extends LinearOpMode {
             telemetry.update();
             lastPosR = robot.MotorR.getCurrentPosition();
         }
-*/
+
         status = "turn until white line";
         robot.MotorR.setPower(-.4 * vr);
         robot.MotorL.setPower(.4 * vl);
