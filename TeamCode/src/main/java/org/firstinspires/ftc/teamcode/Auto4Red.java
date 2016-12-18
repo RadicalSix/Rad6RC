@@ -65,7 +65,8 @@ public class Auto4Red extends LinearOpMode {
         robot.liftservo.setPosition(.25);
         robot.shotFeeder.setPosition(.9);
         robot.conveyorservo.setPosition(0);//in
-        robot.pressservo.setPosition(0);
+        robot.pressservoL.setPosition(0);
+        robot.pressservoR.setPosition(1);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");
@@ -120,7 +121,7 @@ public class Auto4Red extends LinearOpMode {
         status = "feed second ball";
         runtime.reset();
         while(opModeIsActive() && runtime.seconds() < 2){
-            robot.pressservo.setPosition(.36);
+            robot.pressservoL.setPosition(.8);
             robot.shotFeeder.setPosition(.9);
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.addData("Status:", status);
@@ -185,7 +186,7 @@ public class Auto4Red extends LinearOpMode {
             }
             robot.MotorR.setPower(-.55 * vr);
             robot.MotorL.setPower(-.55 * vl);
-            robot.pressservo.setPosition(0);
+            robot.pressservoL.setPosition(0);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorR current", robot.MotorR.getCurrentPosition()- startPosR);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
@@ -269,10 +270,10 @@ public class Auto4Red extends LinearOpMode {
                 telemetry.addData("Status:", status);
                 telemetry.update();
                 if (beaconOneRed) {
-                    robot.pressservo.setPosition(.93);
+                    robot.pressservoR.setPosition(.2);
                 }
                 else {
-                    robot.pressservo.setPosition(.36);
+                    robot.pressservoL.setPosition(.8);
                 }
             }
 
@@ -336,7 +337,8 @@ public class Auto4Red extends LinearOpMode {
             if(robot.colsensor.blue() > 8){
                 longDriveDone = true;//hit white line
             }
-            robot.pressservo.setPosition(0);
+            robot.pressservoL.setPosition(0);
+            robot.pressservoR.setPosition(1);
             telemetry.addData("Status:", status);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
             telemetry.update();
@@ -441,10 +443,10 @@ public class Auto4Red extends LinearOpMode {
             telemetry.addData("Status:", status);
             telemetry.update();
             if (beaconTwoRed) {
-                robot.pressservo.setPosition(.93);
+                robot.pressservoR.setPosition(.2);
             }
             else {
-                robot.pressservo.setPosition(.36);
+                robot.pressservoL.setPosition(.8);
             }
         }
 

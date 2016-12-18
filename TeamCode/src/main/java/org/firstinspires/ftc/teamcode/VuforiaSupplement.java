@@ -72,7 +72,7 @@ public class VuforiaSupplement extends LinearOpMode {
         double startPosR = robot.MotorR.getCurrentPosition();
         robot.liftservo.setPosition(.03);
         robot.shotFeeder.setPosition(.9);
-        robot.pressservo.setPosition(.0);
+        robot.pressservoR.setPosition(.0);
         robot.conveyorservo.setPosition(0);//in
 
         // Send telemetry message to signify robot waiting;

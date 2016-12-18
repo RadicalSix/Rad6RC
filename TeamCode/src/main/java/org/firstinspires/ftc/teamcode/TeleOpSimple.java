@@ -69,17 +69,17 @@ public class TeleOpSimple extends OpMode{
 
         //paddle to left
         if(gamepad2.dpad_left){
-            robot.pressservo.setPosition(.36);
+            robot.pressservoR.setPosition(.36);
         }
 
         //paddle to right
         if(gamepad2.dpad_right){
-            robot.pressservo.setPosition(.93);
+            robot.pressservoR.setPosition(.93);
         }
 
         //paddle to initial
         if(gamepad2.dpad_down){
-            robot.pressservo.setPosition(0);
+            robot.pressservoR.setPosition(0);
         }
 
 

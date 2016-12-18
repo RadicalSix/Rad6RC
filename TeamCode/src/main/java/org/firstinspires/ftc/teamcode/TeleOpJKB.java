@@ -43,7 +43,8 @@ public class TeleOpJKB extends OpMode{
         robot.init(hardwareMap);
         robot.liftservo.setPosition(.25);
         robot.shotFeeder.setPosition(.9);
-        robot.pressservo.setPosition(0);
+        robot.pressservoL.setPosition(0);
+        robot.pressservoR.setPosition(1);
         robot.conveyorservo.setPosition(0);//in
 
         // Send telemetry message to signify robot waiting;
@@ -242,19 +243,20 @@ public class TeleOpJKB extends OpMode{
 
 
 
-        //paddle to left
+        //Left Paddle Out
         if(gamepad2.dpad_left){
-            robot.pressservo.setPosition(.42);
+            robot.pressservoL.setPosition(.8);
         }
 
-        //paddle to right
+        //Right Paddle Out
         if(gamepad2.dpad_right){
-            robot.pressservo.setPosition(.88);
+            robot.pressservoR.setPosition(.2);
         }
 
-        //paddle to initial
+        //Both paddles in
         if(gamepad2.dpad_down){
-            robot.pressservo.setPosition(0);
+            robot.pressservoL.setPosition(0);
+            robot.pressservoR.setPosition(1);
         }
 
 
@@ -262,7 +264,7 @@ public class TeleOpJKB extends OpMode{
 
     @Override
     public void stop() {
-        /*robot.pressservo.setPosition(.88);
+        /*robot.pressservoL.setPosition(.88);
         //slow it down
         boolean done3 = false;
         while(!done3) {

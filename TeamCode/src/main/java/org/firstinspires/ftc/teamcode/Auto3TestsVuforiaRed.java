@@ -73,7 +73,7 @@ public class Auto3TestsVuforiaRed extends LinearOpMode {
         double startPosR = robot.MotorR.getCurrentPosition();
         robot.liftservo.setPosition(.03);
         robot.shotFeeder.setPosition(.9);
-        robot.pressservo.setPosition(.0);
+        robot.pressservoR.setPosition(.0);
         robot.conveyorservo.setPosition(0);//in
 
         // Send telemetry message to signify robot waiting;
@@ -87,7 +87,7 @@ public class Auto3TestsVuforiaRed extends LinearOpMode {
         status = "Start, move servo";
         telemetry.addData("Status:", status);
         telemetry.update();
-        robot.pressservo.setPosition(.36);
+        robot.pressservoR.setPosition(.36);
 
         status = "start shooter";
         shot = 0;
@@ -342,10 +342,10 @@ public class Auto3TestsVuforiaRed extends LinearOpMode {
             while (opModeIsActive() && runtime.seconds() < 4) {
                 telemetry.update();
                 if (beaconOneRed) {
-                    robot.pressservo.setPosition(.93);
+                    robot.pressservoR.setPosition(.93);
                 }
                 else {
-                    robot.pressservo.setPosition(.36);
+                    robot.pressservoR.setPosition(.36);
                 }
             }
 

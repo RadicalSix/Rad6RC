@@ -37,7 +37,8 @@ public class HardwarePushbotTDR
     public DcMotor ShooterDown = null;
     public DcMotor Conveyor = null;
     public DcMotor Lift = null;
-    public Servo pressservo = null;
+    public Servo pressservoL = null;
+    public Servo pressservoR = null;
     public Servo liftservo = null;
     public Servo shotFeeder = null;
     public Servo conveyorservo = null;
@@ -78,7 +79,8 @@ public class HardwarePushbotTDR
         Conveyor = hwMap.dcMotor.get("Conveyor");
         Lift = hwMap.dcMotor.get("Lift");
         liftservo = hwMap.servo.get("liftservo");
-        pressservo = hwMap.servo.get("pressservo");
+        pressservoL = hwMap.servo.get("pressservoL");
+        pressservoR = hwMap.servo.get("pressservoR");
         conveyorservo = hwMap.servo.get("conveyorservo");
         shotFeeder = hwMap.servo.get("shotFeeder");
         colsensor = hwMap.colorSensor.get("colsensor");

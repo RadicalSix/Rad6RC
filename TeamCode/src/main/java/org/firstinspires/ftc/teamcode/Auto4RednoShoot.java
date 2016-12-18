@@ -55,7 +55,7 @@ public class Auto4RednoShoot extends LinearOpMode {
         robot.liftservo.setPosition(.25);
         robot.shotFeeder.setPosition(.9);
         robot.conveyorservo.setPosition(0);//in
-        robot.pressservo.setPosition(0);
+        robot.pressservoR.setPosition(0);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");
@@ -107,7 +107,7 @@ public class Auto4RednoShoot extends LinearOpMode {
             }
             robot.MotorR.setPower(.55 * vr);
             robot.MotorL.setPower(.55 * vl);
-            robot.pressservo.setPosition(0);
+            robot.pressservoR.setPosition(0);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition()- startPosR + 4000);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
@@ -191,10 +191,10 @@ public class Auto4RednoShoot extends LinearOpMode {
                 telemetry.addData("Status:", status);
                 telemetry.update();
                 if (beaconOneRed) {
-                    robot.pressservo.setPosition(.93);
+                    robot.pressservoR.setPosition(.93);
                 }
                 else {
-                    robot.pressservo.setPosition(.36);
+                    robot.pressservoR.setPosition(.36);
                 }
             }
 
@@ -258,7 +258,7 @@ public class Auto4RednoShoot extends LinearOpMode {
             if(robot.colsensor.blue() > 8){
                 longDriveDone = true;//hit white line
             }
-            robot.pressservo.setPosition(0);
+            robot.pressservoR.setPosition(0);
             telemetry.addData("Status:", status);
             telemetry.addData("sensorColor:", robot.colsensor.blue());
             telemetry.update();
@@ -363,10 +363,10 @@ public class Auto4RednoShoot extends LinearOpMode {
             telemetry.addData("Status:", status);
             telemetry.update();
             if (beaconTwoRed) {
-                robot.pressservo.setPosition(.93);
+                robot.pressservoR.setPosition(.93);
             }
             else {
-                robot.pressservo.setPosition(.36);
+                robot.pressservoR.setPosition(.36);
             }
         }
 

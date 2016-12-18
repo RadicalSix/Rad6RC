@@ -74,7 +74,7 @@ public class Auto2TestsVuforiaBlue extends LinearOpMode {
         double startPosR = robot.MotorR.getCurrentPosition();
         robot.liftservo.setPosition(1);
         robot.shotFeeder.setPosition(.9);
-        robot.pressservo.setPosition(0);
+        robot.pressservoR.setPosition(0);
         robot.conveyorservo.setPosition(0);//in
 
         // Send telemetry message to signify robot waiting;
@@ -544,11 +544,11 @@ public class Auto2TestsVuforiaBlue extends LinearOpMode {
             telemetry.addData("Step:", step);
             telemetry.update();
             if (beaconOneRed) {
-                robot.pressservo.setPosition(.93);
+                robot.pressservoR.setPosition(.93);
 
             }
             else {
-                robot.pressservo.setPosition(.36);
+                robot.pressservoR.setPosition(.36);
             }
 
             idle();
@@ -598,7 +598,7 @@ public class Auto2TestsVuforiaBlue extends LinearOpMode {
 
         //wait, reset servo
         step = 16;
-        robot.pressservo.setPosition(.4);
+        robot.pressservoR.setPosition(.4);
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -730,11 +730,11 @@ public class Auto2TestsVuforiaBlue extends LinearOpMode {
         //press appropriate beacon button
         step = 25;
         if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
-            robot.pressservo.setPosition(.9);
+            robot.pressservoR.setPosition(.9);
 
         }
         else {
-            robot.pressservo.setPosition(.0);
+            robot.pressservoR.setPosition(.0);
         }
 
         //wait

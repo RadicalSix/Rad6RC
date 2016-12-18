@@ -29,7 +29,8 @@ public class HardwarePushbotSimple
     /* Public OpMode members. */
     public DcMotor  MotorL   = null;
     public DcMotor  MotorR  = null;
-    public Servo pressservo = null;
+    public Servo pressservoL = null;
+    public Servo pressservoR = null;
     public ColorSensor colsensor = null;
     public TouchSensor tsensor = null;
     public ColorSensor fruitysensor = null;
@@ -62,7 +63,8 @@ public class HardwarePushbotSimple
         // Define and Initialize Motors
         MotorL   = hwMap.dcMotor.get("motorL");
         MotorR  = hwMap.dcMotor.get("motorR");
-        pressservo = hwMap.servo.get("pressservo");
+        pressservoR = hwMap.servo.get("pressservoR");
+        pressservoL = hwMap.servo.get("pressservoL");
         colsensor = hwMap.colorSensor.get("colsensor");
         tsensor = hwMap.touchSensor.get("tsensor");
         fruitysensor = hwMap.colorSensor.get("fruitysensor");

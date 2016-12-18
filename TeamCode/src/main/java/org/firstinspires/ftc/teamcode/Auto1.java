@@ -52,7 +52,7 @@ public class Auto1 extends LinearOpMode {
         double startPosR = robot.MotorR.getCurrentPosition();
         robot.liftservo.setPosition(1);
         robot.shotFeeder.setPosition(.9);
-        robot.pressservo.setPosition(0);
+        robot.pressservoR.setPosition(0);
         robot.conveyorservo.setPosition(0);//in
 
         // Send telemetry message to signify robot waiting;
@@ -282,11 +282,11 @@ public class Auto1 extends LinearOpMode {
         //press appropriate beacon button
         step = 15;
         if (beaconOneRed) {
-            robot.pressservo.setPosition(.88);
+            robot.pressservoR.setPosition(.88);
 
         }
         else {
-            robot.pressservo.setPosition(.42);
+            robot.pressservoR.setPosition(.42);
         }
 
         //wait
@@ -347,7 +347,7 @@ public class Auto1 extends LinearOpMode {
 
         //wait, reset servo
         step = 20;
-        robot.pressservo.setPosition(0);
+        robot.pressservoR.setPosition(0);
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         startPosR = robot.MotorR.getCurrentPosition();
@@ -479,11 +479,11 @@ public class Auto1 extends LinearOpMode {
         //press appropriate beacon button
         step = 29;
         if (robot.fruitysensor.blue() > robot.fruitysensor.red()) {
-            robot.pressservo.setPosition(.9);
+            robot.pressservoR.setPosition(.9);
 
         }
         else {
-            robot.pressservo.setPosition(.0);
+            robot.pressservoR.setPosition(.0);
         }
 
         //wait
