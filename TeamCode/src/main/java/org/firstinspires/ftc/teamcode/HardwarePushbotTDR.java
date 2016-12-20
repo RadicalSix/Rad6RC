@@ -37,13 +37,14 @@ public class HardwarePushbotTDR
     public DcMotor ShooterDown = null;
     public DcMotor Conveyor = null;
     public DcMotor Lift = null;
-    public Servo pressservo = null;
-    public Servo liftservo = null;
-    public Servo shotFeeder = null;
-    public Servo conveyorservo = null;
-    public ColorSensor colsensor = null;
-    public TouchSensor tsensor = null;
-    public ColorSensor fruitysensor = null;
+    public Servo PressServoR = null;
+    public Servo PressServoL = null;
+    public Servo LiftServo = null;
+    public Servo ShotFeeder = null;
+    public Servo ConveyorServo = null;
+    public ColorSensor ColSensor = null;
+    public TouchSensor TouSensor = null;
+    public ColorSensor FruitySensor = null;
 
 // Test was good
 
@@ -77,13 +78,14 @@ public class HardwarePushbotTDR
         ShooterDown = hwMap.dcMotor.get("ShooterDown");
         Conveyor = hwMap.dcMotor.get("Conveyor");
         Lift = hwMap.dcMotor.get("Lift");
-        liftservo = hwMap.servo.get("LiftServo");//6
-        pressservo = hwMap.servo.get("PressServoR");//1, 5 is L
-        conveyorservo = hwMap.servo.get("ConveyorServo");//2
-        shotFeeder = hwMap.servo.get("ShotFeeder");//3
-       colsensor = hwMap.colorSensor.get("ColorSensor");//0, 12c
-        tsensor = hwMap.touchSensor.get("TouchSensor");//0, digital
-        fruitysensor = hwMap.colorSensor.get("FruitySensor");//, 12c
+        LiftServo = hwMap.servo.get("LiftServo");//6
+        PressServoR = hwMap.servo.get("PressServoR");//1
+        PressServoL = hwMap.servo.get("PressServoL");//5
+        ConveyorServo = hwMap.servo.get("ConveyorServo");//2
+        ShotFeeder = hwMap.servo.get("ShotFeeder");//3
+       ColSensor = hwMap.colorSensor.get("ColorSensor");//0, 12c, can't make it ColorSensor
+        TouSensor = hwMap.touchSensor.get("TouchSensor");//0, digital, can't make it TouchSensor
+        FruitySensor = hwMap.colorSensor.get("FruitySensor");//, 12c
 
 /*;
         armMotor    = hwMap.dcMotor.get("left_arm");

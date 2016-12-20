@@ -23,14 +23,14 @@ public class Info extends LinearOpMode {
     public DcMotor motorR;
     public DcMotor motorL;
     private ElapsedTime runtime = new ElapsedTime();
-    public ColorSensor colsensor;
+    public ColorSensor ColSensor;
 
     double vl = 0.75;
     double vr = 1.0;
     int step = 0;
 
     /*
-        public AutonomousMDR(){
+        public Info(){
 
         }
     */
@@ -50,15 +50,16 @@ public class Info extends LinearOpMode {
 
 
         while (opModeIsActive() ) {
-            telemetry.addData("tsensor.isPressed()", robot.tsensor.isPressed());
+            telemetry.addData("TouSensor.isPressed()", robot.TouSensor.isPressed());
             telemetry.addData("currentPosR", robot.MotorR.getCurrentPosition());
-            telemetry.addData("currentPosPressservo", robot.pressservo.getPosition());
-            telemetry.addData("colsensor, blue:", robot.colsensor.blue());
-            telemetry.addData("colsensor, green:", robot.colsensor.green());
-            telemetry.addData("colsensor, red:", robot.colsensor.red());
-            telemetry.addData("fruitysensor, blue:", robot.fruitysensor.blue());
-            telemetry.addData("fruitysensor, red:", robot.fruitysensor.red());
-            telemetry.addData("fruitysensor, green:", robot.fruitysensor.green());
+            telemetry.addData("currentPosPressServoR", robot.PressServoR.getPosition());
+            telemetry.addData("currentPosPressServoL", robot.PressServoL.getPosition());
+            telemetry.addData("ColSensor, blue:", robot.ColSensor.blue());
+            telemetry.addData("ColSensor, green:", robot.ColSensor.green());
+            telemetry.addData("ColSensor, red:", robot.ColSensor.red());
+            telemetry.addData("FruitySensor, blue:", robot.FruitySensor.blue());
+            telemetry.addData("FruitySensor, red:", robot.FruitySensor.red());
+            telemetry.addData("FruitySensor, green:", robot.FruitySensor.green());
             telemetry.update();
             //idle();
         }

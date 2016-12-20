@@ -24,7 +24,7 @@ public class TestRun extends LinearOpMode{
     double vr = 0.5;
 
 /*
-    public AutonomousMDR(){
+    public TestRun(){
 
     }
 */
