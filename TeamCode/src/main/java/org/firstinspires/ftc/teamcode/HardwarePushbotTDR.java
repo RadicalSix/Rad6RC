@@ -77,13 +77,13 @@ public class HardwarePushbotTDR
         ShooterDown = hwMap.dcMotor.get("ShooterDown");
         Conveyor = hwMap.dcMotor.get("Conveyor");
         Lift = hwMap.dcMotor.get("Lift");
-        liftservo = hwMap.servo.get("liftservo");
-        pressservo = hwMap.servo.get("pressservo");
-        conveyorservo = hwMap.servo.get("conveyorservo");
-        shotFeeder = hwMap.servo.get("shotFeeder");
-        colsensor = hwMap.colorSensor.get("colsensor");
-        tsensor = hwMap.touchSensor.get("tsensor");
-        fruitysensor = hwMap.colorSensor.get("fruitysensor");
+        liftservo = hwMap.servo.get("LiftServo");//6
+        pressservo = hwMap.servo.get("PressServoR");//1, 5 is L
+        conveyorservo = hwMap.servo.get("ConveyorServo");//2
+        shotFeeder = hwMap.servo.get("ShotFeeder");//3
+       colsensor = hwMap.colorSensor.get("ColorSensor");//0, 12c
+        tsensor = hwMap.touchSensor.get("TouchSensor");//0, digital
+        fruitysensor = hwMap.colorSensor.get("FruitySensor");//, 12c
 
 /*;
         armMotor    = hwMap.dcMotor.get("left_arm");
