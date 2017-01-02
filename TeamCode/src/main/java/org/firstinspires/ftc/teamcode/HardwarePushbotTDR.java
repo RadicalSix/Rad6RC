@@ -90,8 +90,8 @@ public class HardwarePushbotTDR
 /*;
         armMotor    = hwMap.dcMotor.get("left_arm");
 */
-        MotorR.setDirection(DcMotor.Direction.FORWARD); //changed 12/5
-        MotorL.setDirection(DcMotor.Direction.REVERSE); //changed 12/5
+        MotorR.setDirection(DcMotor.Direction.REVERSE); //changed 12/5
+        MotorL.setDirection(DcMotor.Direction.FORWARD); //changed 12/5
 
         // Set all motors to zero power
         MotorL.setPower(0);

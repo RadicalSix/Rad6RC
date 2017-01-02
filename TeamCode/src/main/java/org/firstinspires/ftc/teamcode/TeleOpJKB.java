@@ -73,6 +73,7 @@ public class TeleOpJKB extends OpMode{
             telemetry.addData("Buttons Direction", direction);
         }
 
+        telemetry.addData("Direction", direction);
 
 
         if(gamepad1.left_stick_button){
@@ -93,10 +94,10 @@ public class TeleOpJKB extends OpMode{
         //LEFT JOYSTICK
         if (l <-0.05 || l > 0.05){
             if(direction == 1){
-                robot.MotorR.setPower(l*vr*direction*reduceSpeed);
+                robot.MotorL.setPower(l*vl*direction*reduceSpeed);
             }
             else if (direction ==-1){
-                robot.MotorL.setPower(l*vl*direction*reduceSpeed);
+                robot.MotorR.setPower(l*vr*direction*reduceSpeed);
             }
         }
         else{
@@ -111,10 +112,10 @@ public class TeleOpJKB extends OpMode{
         //RIGHT JOYSTICK
         if (r <-0.05 || r > 0.05){
             if(direction == 1){
-                robot.MotorL.setPower(r*vl*direction*reduceSpeed);
+                robot.MotorR.setPower(r*vr*direction*reduceSpeed);
             }
             else if (direction ==-1){
-                robot.MotorR.setPower(r*vr*direction*reduceSpeed);
+                robot.MotorL.setPower(r*vl*direction*reduceSpeed);
             }
         }
         else {
@@ -261,6 +262,12 @@ public class TeleOpJKB extends OpMode{
         if(gamepad2.dpad_down){
             robot.PressServoL.setPosition(0);
             robot.PressServoR.setPosition(1);
+        }
+
+        //both out
+        if(gamepad2.dpad_up){
+            robot.PressServoL.setPosition(0.8);
+            robot.PressServoR.setPosition(0);
         }
 
 
