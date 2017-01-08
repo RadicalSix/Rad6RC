@@ -46,6 +46,7 @@ public class TeleOpJKB extends OpMode{
         robot.PressServoR.setPosition(1);
         robot.PressServoL.setPosition(0);
         robot.ConveyorServo.setPosition(0);//in
+        robot.TouchServo.setPosition(0);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -208,6 +209,7 @@ public class TeleOpJKB extends OpMode{
         //CONVEYOR
         if(gamepad2.right_trigger > .5){
             robot.Conveyor.setPower(.7);
+            robot.TouchServo.setPosition(.15);
         }
 
         else{
