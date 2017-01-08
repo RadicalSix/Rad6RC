@@ -12,9 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //LinearOpMode
     //started 12/19 by Justin
 
-@Autonomous(name = "auto5Red", group = "Auto")
+@Autonomous(name = "auto5RedNoShoot", group = "Auto")
 
-public class Auto5Red extends LinearOpMode {
+public class Auto5RedNoShoot extends LinearOpMode {
 
     HardwarePushbotTDR robot = new HardwarePushbotTDR();
     VuforiaOp camera = new VuforiaOp();
@@ -63,7 +63,7 @@ public class Auto5Red extends LinearOpMode {
         robot.ConveyorServo.setPosition(0);//in
         robot.PressServoR.setPosition(1);//in
         robot.PressServoL.setPosition(0);//in
-        robot.TouchServo.setPosition(1);
+        robot.TouchServo.setPosition(0);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");
@@ -80,7 +80,7 @@ public class Auto5Red extends LinearOpMode {
         telemetry.update();
 
 
-        status = "start shooter";
+        /*status = "start shooter";
         shot = 0;
         while(opModeIsActive() && shot < shotSpeed) {
             shot += 0.02;
@@ -119,7 +119,6 @@ public class Auto5Red extends LinearOpMode {
         runtime.reset();
         while(opModeIsActive() && runtime.seconds() < 2){
             robot.PressServoL.setPosition(.6);//out part of the way
-            robot.TouchServo.setPosition(0);
             robot.ShotFeeder.setPosition(.9);
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.addData("Status:", status);
@@ -186,16 +185,17 @@ public class Auto5Red extends LinearOpMode {
             robot.MotorL.setPower(vl * .5);
         }
         robot.MotorR.setPower(0);
-        robot.MotorL.setPower(0);
+        robot.MotorL.setPower(0);*/
 
         startPosR = robot.MotorL.getCurrentPosition();
         status = "drive back until white line";
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosR - 2900 && !doneDrive1) {//stop if hit line or go certain distance
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosR - 4200 && !doneDrive1) {//stop if hit line or go certain distance
             if(robot.ColSensor.blue() > 8){
                 doneDrive1 = true;//hit white line
             }
             robot.MotorL.setPower(-.55 * vl);
             robot.MotorR.setPower(-.55 * vr);
+            robot.TouchServo.setPosition(.65);
             robot.PressServoL.setPosition(0);//in
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL current", robot.MotorL.getCurrentPosition()- startPosR);
@@ -335,6 +335,7 @@ public class Auto5Red extends LinearOpMode {
             telemetry.update();
             robot.MotorR.setPower(0);
             robot.MotorL.setPower(0);
+            robot.TouchServo.setPosition(0);
             startPosR = robot.MotorL.getCurrentPosition();
             runtime.reset();
             while (opModeIsActive() && runtime.seconds() < 1) {
@@ -390,7 +391,7 @@ public class Auto5Red extends LinearOpMode {
         status = "turn to beacon 2";
         telemetry.update();
         startPosR = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosR + 950) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosR + 1050) {
             robot.MotorL.setPower(.5 * vl);
             robot.MotorR.setPower(-.5 * vr);
             robot.PressServoR.setPosition(1);//in
@@ -422,12 +423,12 @@ public class Auto5Red extends LinearOpMode {
         robot.MotorL.setPower(-.3 * vl);
         robot.MotorR.setPower(-.3 * vr);
         while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosR - 550) && !forwardTwoDone)  {//stop if go certain distance or stuck on wall
-            if(lastPosL == robot.MotorL.getCurrentPosition()){
+            /*if(lastPosL == robot.MotorL.getCurrentPosition()){
                 forwardTwoCount++;
             }
             if(forwardTwoCount > 5){
                 forwardTwoDone = true;//stuck on wall
-            }
+            }*/
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL units to go", robot.MotorL.getCurrentPosition() - startPosR + 550);
             telemetry.addData("MotorL current", robot.MotorL.getCurrentPosition());
@@ -440,6 +441,7 @@ public class Auto5Red extends LinearOpMode {
         status = "turn until white line";
         robot.MotorL.setPower(-.4 * vl);
         robot.MotorR.setPower(.4 * vr);
+        robot.TouchServo.setPosition(.65);
         while (opModeIsActive() && robot.ColSensor.blue() < 8) {
             /*if(lastPosL == robot.MotorL.getCurrentPosition()){
                 turnTwoCount++;
@@ -508,6 +510,7 @@ public class Auto5Red extends LinearOpMode {
         telemetry.update();
         robot.MotorR.setPower(0);
         robot.MotorL.setPower(0);
+        robot.TouchServo.setPosition(0);
         startPosR = robot.MotorL.getCurrentPosition();
         runtime.reset();
         while (opModeIsActive() && runtime.seconds() < 1) {

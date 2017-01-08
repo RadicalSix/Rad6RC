@@ -42,6 +42,7 @@ public class HardwarePushbotTDR
     public Servo LiftServo = null;
     public Servo ShotFeeder = null;
     public Servo ConveyorServo = null;
+    public Servo TouchServo = null;
     public ColorSensor ColSensor = null;
     public TouchSensor TouSensor = null;
     public ColorSensor FruitySensor = null;
@@ -83,6 +84,7 @@ public class HardwarePushbotTDR
         PressServoL = hwMap.servo.get("PressServoL");//5
         ConveyorServo = hwMap.servo.get("ConveyorServo");//2
         ShotFeeder = hwMap.servo.get("ShotFeeder");//3
+        TouchServo = hwMap.servo.get("TouchServo");
        ColSensor = hwMap.colorSensor.get("ColorSensor");//0, 12c, can't make it ColorSensor
         TouSensor = hwMap.touchSensor.get("TouchSensor");//0, digital, can't make it TouchSensor
         FruitySensor = hwMap.colorSensor.get("FruitySensor");//, 12c
