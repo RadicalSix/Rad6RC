@@ -27,7 +27,7 @@ public class TeleOpJKB extends OpMode{
     int direction = 1;
     int shot = 0;
     double step = 0;
-    double shotspeed = 1;
+    double shotspeed = .37;
     double startPosR;
     boolean backdone = false;
     double reduceSpeed = 1;
@@ -216,10 +216,10 @@ public class TeleOpJKB extends OpMode{
             robot.Conveyor.setPower(0);
         }
 
-        if(gamepad2.x){
+        if(gamepad2.b){
             robot.ConveyorServo.setPosition(1);//out
         }
-        if(gamepad2.b){
+        if(gamepad2.x){
             robot.ConveyorServo.setPosition(0);//in
         }
 
