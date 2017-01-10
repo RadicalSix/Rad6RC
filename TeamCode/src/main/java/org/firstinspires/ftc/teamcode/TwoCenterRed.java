@@ -58,7 +58,7 @@ public class TwoCenterRed extends LinearOpMode {
         robot.init(hardwareMap);
 
         double startPosR = robot.MotorL.getCurrentPosition();
-        robot.LiftServo.setPosition(.25);
+        robot.LiftServo.setPosition(.05);
         robot.ShotFeeder.setPosition(.9);
         robot.ConveyorServo.setPosition(0);//in
         robot.PressServoR.setPosition(1);//in
