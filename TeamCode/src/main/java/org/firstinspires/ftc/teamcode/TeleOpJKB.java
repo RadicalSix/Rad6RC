@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by Troy on 10/01/16.
-  This works
+ This works
 
  */
 //LinearOpMode
@@ -27,21 +27,22 @@ public class TeleOpJKB extends OpMode{
     int direction = 1;
     int shot = 0;
     double step = 0;
-    double shotspeed = .37;
+    double loadStep = 0;
+    double shotspeed = .44;
     double startPosR;
     boolean backdone = false;
     double reduceSpeed = 1;
 
-/*
-    public TeleOpJKB(){
+    /*
+        public TeleOpJKB(){
 
-    }
-*/
+        }
+    */
     @Override
     public void init() {
 
         robot.init(hardwareMap);
-        robot.LiftServo.setPosition(.25);
+        robot.LiftServo.setPosition(.15);
         robot.ShotFeeder.setPosition(.9);
         robot.PressServoR.setPosition(1);
         robot.PressServoL.setPosition(0);
@@ -129,20 +130,15 @@ public class TeleOpJKB extends OpMode{
         }
 
 
-
-
-
-
-
         //SHOOTING
         if(gamepad1.a){
-            shotspeed = .37;
-        }
-        if(gamepad1.y){
             shotspeed = .44;
         }
+        if(gamepad1.y){
+            shotspeed = .64;
+        }
 
-        if(gamepad2.y){//on
+        if(gamepad2.y && robot.LiftServo.getPosition() < .8){//on
             shot = 1;
         }
         if(gamepad2.a){//off
@@ -176,10 +172,12 @@ public class TeleOpJKB extends OpMode{
         robot.ShooterUp.setPower(-step);
 
         //load shooter
+        loadStep = robot.ShotFeeder.getPosition();
         if(gamepad2.right_bumper){
-            runtime.reset();
-            while(runtime.seconds() < .8){
-                robot.ShotFeeder.setPosition(0);
+            loadStep -= .01;
+            while(loadStep > 0){
+                loadStep -= .01;
+                robot.ShotFeeder.setPosition(loadStep);
             }
             robot.ShotFeeder.setPosition(.9);
         }
@@ -230,7 +228,7 @@ public class TeleOpJKB extends OpMode{
         //LIFT
         double h = -gamepad2.left_stick_y;
         telemetry.addData("h", h);
-        if(((h > 0.05) || (h < -0.05)) && (robot.LiftServo.getPosition() == .95)){
+        if(((h > 0.05) || (h < -0.05)) && (robot.LiftServo.getPosition() == .85)){//does not lift unless servo out of way
             robot.Lift.setPower(h);
         }
         else{
@@ -240,10 +238,10 @@ public class TeleOpJKB extends OpMode{
 
         //LiftServo up
         if(gamepad2.left_bumper){
-            robot.LiftServo.setPosition(.95);
+            robot.LiftServo.setPosition(.85);
         }
         if(gamepad2.left_trigger > .5){
-            robot.LiftServo.setPosition(.25);//down
+            robot.LiftServo.setPosition(.05);//down
         }
 
 
@@ -252,7 +250,7 @@ public class TeleOpJKB extends OpMode{
         //PADDLES
         //left paddle out
         if(gamepad2.dpad_left){
-            robot.PressServoL.setPosition(.8);
+            robot.PressServoL.setPosition(1);
         }
 
         //right paddle out
