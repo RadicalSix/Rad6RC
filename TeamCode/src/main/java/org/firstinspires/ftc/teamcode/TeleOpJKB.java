@@ -139,6 +139,7 @@ public class TeleOpJKB extends OpMode{
         }
 
         if(gamepad2.y && robot.LiftServo.getPosition() < .8){//on
+            robot.PressServoL.setPosition(1);
             shot = 1;
         }
         if(gamepad2.a){//off
@@ -174,10 +175,9 @@ public class TeleOpJKB extends OpMode{
         //load shooter
         loadStep = robot.ShotFeeder.getPosition();
         if(gamepad2.right_bumper){
-            loadStep -= .01;
-            while(loadStep > 0){
-                loadStep -= .01;
-                robot.ShotFeeder.setPosition(loadStep);
+            runtime.reset();
+            while(runtime.seconds()< 1.5){
+                robot.ShotFeeder.setPosition(0);
             }
             robot.ShotFeeder.setPosition(.9);
         }
@@ -250,22 +250,26 @@ public class TeleOpJKB extends OpMode{
         //PADDLES
         //left paddle out
         if(gamepad2.dpad_left){
+            robot.TouchServo.setPosition(0);
             robot.PressServoL.setPosition(1);
         }
 
         //right paddle out
         if(gamepad2.dpad_right){
+            robot.TouchServo.setPosition(0);
             robot.PressServoR.setPosition(0);
         }
 
         //both to initial
         if(gamepad2.dpad_down){
+            robot.TouchServo.setPosition(0);
             robot.PressServoL.setPosition(0);
             robot.PressServoR.setPosition(1);
         }
 
         //both out
         if(gamepad2.dpad_up){
+            robot.TouchServo.setPosition(0);
             robot.PressServoL.setPosition(0.8);
             robot.PressServoR.setPosition(0);
         }

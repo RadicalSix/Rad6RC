@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //LinearOpMode
 //started 12/19 by Justin
 
-@Autonomous(name = "TwoShootRed", group = "Auto")
+//@Autonomous(name = "TwoShootRed", group = "Auto")
 
 public class TwoShootRed extends LinearOpMode {
 
@@ -477,7 +477,7 @@ public class TwoShootRed extends LinearOpMode {
         }
 
         status = "shoot first ball";
-
+        runtime.reset();
         while (opModeIsActive() && runtime.seconds() < 1.5) {
             shot = shotSpeed;
             robot.ShotFeeder.setPosition(0);
@@ -490,7 +490,7 @@ public class TwoShootRed extends LinearOpMode {
         }
 
         status = "feed second ball";
-
+        runtime.reset();
         while (opModeIsActive() && runtime.seconds() < 2) {
             robot.PressServoL.setPosition(.6);//out part of the way
             robot.TouchServo.setPosition(0);
@@ -502,7 +502,7 @@ public class TwoShootRed extends LinearOpMode {
 
         status = "shoot second ball";
         robot.Conveyor.setPower(0);
-
+        runtime.reset();
         while (opModeIsActive() && runtime.seconds() < 2.5) {
             shot = shotSpeed;
             robot.ShotFeeder.setPosition(0);
