@@ -1,3 +1,8 @@
+//PRIMARY AUTONOMOUS PROGRAM
+//TwoShootCenterRed
+
+
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -117,7 +122,7 @@ public class TwoShootCenterRed extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         robot.MotorL.setPower(-.3 * vl);
         robot.MotorR.setPower(-.3 * vr);
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 650) && doneDrive1) {//only does this step if hit white line
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 950) && doneDrive1) {//only does this step if hit white line
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL units to go", robot.MotorL.getCurrentPosition() - startPosL + 650);
             telemetry.addData("MotorL current", robot.MotorL.getCurrentPosition());
@@ -140,7 +145,7 @@ public class TwoShootCenterRed extends LinearOpMode {
             robot.MotorL.setPower(-.37 * vl);
             robot.MotorR.setPower(.37 * vr);
 
-            if(runtime.seconds() - lastClock > 1.7){
+            /*if(runtime.seconds() - lastClock > 1.7){
                 lastPosL = robot.MotorL.getCurrentPosition();
                 lastPosR = robot.MotorR.getCurrentPosition();
                 lastClock = runtime.seconds();
@@ -153,7 +158,7 @@ public class TwoShootCenterRed extends LinearOpMode {
                     robot.MotorL.setPower(0);
                     robot.MotorR.setPower(0);
                 }
-            }
+            }*/
             telemetry.addData("lastPosL", lastPosL);
             telemetry.addData("current", robot.MotorL.getCurrentPosition());
             telemetry.addData("turnOneCount", turnOneCount);
