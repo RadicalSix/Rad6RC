@@ -37,13 +37,15 @@ public class HardwarePushbotTDR
     public DcMotor ShooterDown = null;
     public DcMotor Conveyor = null;
     public DcMotor Lift = null;
-    public Servo pressservo = null;
-    public Servo liftservo = null;
-    public Servo shotFeeder = null;
-    public Servo conveyorservo = null;
-    public ColorSensor colsensor = null;
-    public TouchSensor tsensor = null;
-    public ColorSensor fruitysensor = null;
+    public Servo PressServoR = null;
+    public Servo PressServoL = null;
+    public Servo LiftServo = null;
+    public Servo ShotFeeder = null;
+    public Servo ConveyorServo = null;
+    public Servo TouchServo = null;
+    public ColorSensor ColSensor = null;
+    public TouchSensor TouSensor = null;
+    public ColorSensor FruitySensor = null;
 
 // Test was good
 
@@ -77,19 +79,21 @@ public class HardwarePushbotTDR
         ShooterDown = hwMap.dcMotor.get("ShooterDown");
         Conveyor = hwMap.dcMotor.get("Conveyor");
         Lift = hwMap.dcMotor.get("Lift");
-        liftservo = hwMap.servo.get("liftservo");
-        pressservo = hwMap.servo.get("pressservo");
-        conveyorservo = hwMap.servo.get("conveyorservo");
-        shotFeeder = hwMap.servo.get("shotFeeder");
-        colsensor = hwMap.colorSensor.get("colsensor");
-        tsensor = hwMap.touchSensor.get("tsensor");
-        fruitysensor = hwMap.colorSensor.get("fruitysensor");
+        LiftServo = hwMap.servo.get("LiftServo");//6
+        PressServoR = hwMap.servo.get("PressServoR");//1
+        PressServoL = hwMap.servo.get("PressServoL");//5
+        ConveyorServo = hwMap.servo.get("ConveyorServo");//2
+        ShotFeeder = hwMap.servo.get("ShotFeeder");//3
+        TouchServo = hwMap.servo.get("TouchServo");
+       ColSensor = hwMap.colorSensor.get("ColorSensor");//0, 12c, can't make it ColorSensor
+        TouSensor = hwMap.touchSensor.get("TouchSensor");//0, digital, can't make it TouchSensor
+        FruitySensor = hwMap.colorSensor.get("FruitySensor");//, 12c
 
 /*;
         armMotor    = hwMap.dcMotor.get("left_arm");
 */
-        MotorR.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        MotorL.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        MotorR.setDirection(DcMotor.Direction.REVERSE); //changed 12/5
+        MotorL.setDirection(DcMotor.Direction.FORWARD); //changed 12/5
 
         // Set all motors to zero power
         MotorL.setPower(0);

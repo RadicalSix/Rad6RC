@@ -8,8 +8,7 @@ import com.qualcomm.robotcore.hardware.PWMOutput;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Created by Troy on 10/01/16.
-  This works
+ This works
 
  */
 //LinearOpMode
@@ -27,24 +26,27 @@ public class TeleOpJKB extends OpMode{
     int direction = 1;
     int shot = 0;
     double step = 0;
-    double shotspeed = 1;
+    double loadStep = 0;
+    double shotspeed = .44;
     double startPosR;
     boolean backdone = false;
     double reduceSpeed = 1;
 
-/*
-    public AutonomousMDR(){
+    /*
+        public TeleOpJKB(){
 
-    }
-*/
+        }
+    */
     @Override
     public void init() {
 
         robot.init(hardwareMap);
-        robot.liftservo.setPosition(.25);
-        robot.shotFeeder.setPosition(.9);
-        robot.pressservo.setPosition(0);
-        robot.conveyorservo.setPosition(0);//in
+        robot.LiftServo.setPosition(.15);
+        robot.ShotFeeder.setPosition(.9);
+        robot.PressServoR.setPosition(1);
+        robot.PressServoL.setPosition(0);
+        robot.ConveyorServo.setPosition(0);//in
+        robot.TouchServo.setPosition(0);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -56,6 +58,8 @@ public class TeleOpJKB extends OpMode{
     public void loop(){
         telemetry.addData("Loop", "Running");
 
+
+        //DRIVING
         if(gamepad1.b){
             reduceSpeed = 1;
         }
@@ -66,14 +70,15 @@ public class TeleOpJKB extends OpMode{
 
 
         if(gamepad1.right_stick_button){
-            direction = 1;//forward to push buttons
+            direction = -1;//forward to push buttons
             telemetry.addData("Buttons Direction", direction);
         }
 
+        telemetry.addData("Direction", direction);
 
 
         if(gamepad1.left_stick_button){
-            direction = -1;//forward to shoot
+            direction = 1;//forward to shoot, lift
             telemetry.addData("Lift Direction", direction);
         }
 
@@ -87,7 +92,7 @@ public class TeleOpJKB extends OpMode{
         telemetry.addData("l value:", l);
         telemetry.addData("r value:", r);
 
-        //left wheel
+        //LEFT JOYSTICK
         if (l <-0.05 || l > 0.05){
             if(direction == 1){
                 robot.MotorL.setPower(l*vl*direction*reduceSpeed);
@@ -105,7 +110,7 @@ public class TeleOpJKB extends OpMode{
             }
         }
 
-        //right wheel
+        //RIGHT JOYSTICK
         if (r <-0.05 || r > 0.05){
             if(direction == 1){
                 robot.MotorR.setPower(r*vr*direction*reduceSpeed);
@@ -124,22 +129,16 @@ public class TeleOpJKB extends OpMode{
         }
 
 
-
-
-
-
-
-        //shooter
-
+        //SHOOTING
         if(gamepad1.a){
-            shotspeed = .37;
-        }
-        if(gamepad1.y){
             shotspeed = .44;
         }
+        if(gamepad1.y){
+            shotspeed = .64;
+        }
 
-
-        if(gamepad2.y){//on
+        if(gamepad2.y && robot.LiftServo.getPosition() < .8){//on
+            robot.PressServoL.setPosition(1);
             shot = 1;
         }
         if(gamepad2.a){//off
@@ -157,7 +156,10 @@ public class TeleOpJKB extends OpMode{
             if(step > 0.05 ){
                 step -= 0.01;
             }
-            if(step < 0.05){
+            if(step < 0.08){
+                step -= 0.0025;//smaller increments for ending
+            }
+            if(step < 0.0025){
                 step = 0;
             }
 
@@ -169,15 +171,20 @@ public class TeleOpJKB extends OpMode{
         robot.ShooterDown.setPower(step);
         robot.ShooterUp.setPower(-step);
 
-
+        //load shooter
+        loadStep = robot.ShotFeeder.getPosition();
         if(gamepad2.right_bumper){
             runtime.reset();
-            while(runtime.seconds() < .8){
-                robot.shotFeeder.setPosition(0);
+            while(runtime.seconds()< 1.5){
+                robot.ShotFeeder.setPosition(0);
             }
-            robot.shotFeeder.setPosition(.9);
+            robot.ShotFeeder.setPosition(.9);
         }
 
+
+
+        /*
+        //PROGRAMMED BACKUP
         if(gamepad1.dpad_down){
             startPosR = robot.MotorR.getCurrentPosition();
             backdone = false;
@@ -192,69 +199,78 @@ public class TeleOpJKB extends OpMode{
             }
             robot.MotorR.setPower(0);
             robot.MotorL.setPower(0);
-        }
+        }*/
 
 
 
-        //Conveyor
+        //CONVEYOR
         if(gamepad2.right_trigger > .5){
             robot.Conveyor.setPower(.7);
+            robot.TouchServo.setPosition(.15);
         }
 
         else{
             robot.Conveyor.setPower(0);
         }
 
-        if(gamepad2.x){
-            robot.conveyorservo.setPosition(1);//out
-        }
         if(gamepad2.b){
-            robot.conveyorservo.setPosition(0);//in
+            robot.ConveyorServo.setPosition(1);//out
+        }
+        if(gamepad2.x){
+            robot.ConveyorServo.setPosition(0);//in
         }
 
 
 
 
 
-        //Lift
+        //LIFT
         double h = -gamepad2.left_stick_y;
-        if(h > 0.05 || h < -0.05 && (robot.liftservo.getPosition() == .81)){
+        telemetry.addData("h", h);
+        if(((h > 0.05) || (h < -0.05)) && (robot.LiftServo.getPosition() == .85)){//does not lift unless servo out of way
             robot.Lift.setPower(h);
-            telemetry.addData("h", h);
         }
         else{
             robot.Lift.setPower(0);
         }
 
 
-
-
-
-        //Liftservo up
+        //LiftServo up
         if(gamepad2.left_bumper){
-            robot.liftservo.setPosition(.81);
+            robot.LiftServo.setPosition(.85);
         }
         if(gamepad2.left_trigger > .5){
-            robot.liftservo.setPosition(.25);//down
+            robot.LiftServo.setPosition(.05);//down
         }
 
 
 
 
-
-        //paddle to left
+        //PADDLES
+        //left paddle out
         if(gamepad2.dpad_left){
-            robot.pressservo.setPosition(.42);
+            robot.TouchServo.setPosition(0);
+            robot.PressServoL.setPosition(1);
         }
 
-        //paddle to right
+        //right paddle out
         if(gamepad2.dpad_right){
-            robot.pressservo.setPosition(.88);
+            robot.TouchServo.setPosition(0);
+            robot.PressServoR.setPosition(0);
         }
 
-        //paddle to initial
+        //both to initial
         if(gamepad2.dpad_down){
-            robot.pressservo.setPosition(0);
+            robot.TouchServo.setPosition(0);
+            robot.PressServoL.setPosition(0);
+            robot.PressServoR.setPosition(1);
+        }
+
+        //both out
+        if(gamepad2.dpad_up){
+            robot.TouchServo.setPosition(0);
+            robot.PressServoL.setPosition(0.8);
+            robot.PressServoR.setPosition(0);
         }
 
 
@@ -262,7 +278,7 @@ public class TeleOpJKB extends OpMode{
 
     @Override
     public void stop() {
-        /*robot.pressservo.setPosition(.88);
+        /*robot.PressServoR.setPosition(.88);
         //slow it down
         boolean done3 = false;
         while(!done3) {
