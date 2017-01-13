@@ -84,13 +84,13 @@ public class TwoShootCenterBlue extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         status = "drive back until white line";
         shot = 0;
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 4500 && !doneDrive1) {//stop if hit line or go certain distance
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 4800 && !doneDrive1) {//stop if hit line or go certain distance
             if (robot.ColSensor.blue() > 8) {
                 doneDrive1 = true;//hit white line
             }
             robot.MotorL.setPower(-.85 * vl);
             robot.MotorR.setPower(-.85 * vr);
-            robot.TouchServo.setPosition(.8);
+            robot.TouchServo.setPosition(.65);
             robot.PressServoL.setPosition(0);//in
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL current", robot.MotorL.getCurrentPosition() - startPosL);
@@ -115,7 +115,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         robot.MotorL.setPower(-.3 * vl);
         robot.MotorR.setPower(-.3 * vr);
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 750) && doneDrive1) {//only does this step if hit white line
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 950) && doneDrive1) {//only does this step if hit white line
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL units to go", robot.MotorL.getCurrentPosition() - startPosL + 650);
             telemetry.addData("MotorL current", robot.MotorL.getCurrentPosition());
@@ -138,7 +138,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
             robot.MotorL.setPower(.41 * vl);
             robot.MotorR.setPower(-.41 * vr);
 
-            if(runtime.seconds() - lastClock > 1.7){
+            /*if(runtime.seconds() - lastClock > 1.7){
                 lastPosL = robot.MotorL.getCurrentPosition();
                 lastPosR = robot.MotorR.getCurrentPosition();
                 lastClock = runtime.seconds();
@@ -151,7 +151,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
                     robot.MotorL.setPower(0);
                     robot.MotorR.setPower(0);
                 }
-            }
+            }*/
             telemetry.addData("lastPosL", lastPosL);
             telemetry.addData("current", robot.MotorL.getCurrentPosition());
             telemetry.addData("turnOneCount", turnOneCount);
@@ -274,8 +274,8 @@ public class TwoShootCenterBlue extends LinearOpMode {
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 850) {
-            robot.MotorL.setPower(.6 * vl);
-            robot.MotorR.setPower(.6 * vr);
+            robot.MotorL.setPower(.7 * vl);//changed from .6 and .6 to turn to vortex
+            robot.MotorR.setPower(.4 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 850);
             telemetry.update();
@@ -355,7 +355,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
         status = "turn to beacon 2";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 700) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 600) {
             robot.MotorL.setPower(-.5 * vl);
             robot.MotorR.setPower(.5 * vr);
             robot.PressServoR.setPosition(1);//in
@@ -371,7 +371,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
         robot.MotorR.setPower(0);
 
         status = "drive until white line";
-        robot.TouchServo.setPosition(.8);
+        robot.TouchServo.setPosition(.65);
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 3700) && !longDriveDone) {//stop if hit line or go certain distance
             robot.MotorL.setPower(-.85 * vl);
@@ -410,7 +410,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         robot.MotorL.setPower(-.3 * vl);
         robot.MotorR.setPower(-.3 * vr);
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 550) && !forwardTwoDone) {//stop if go certain distance or stuck on wall
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 950) && !forwardTwoDone) {//stop if go certain distance or stuck on wall
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL units to go", robot.MotorL.getCurrentPosition() - startPosL + 550);
             telemetry.addData("MotorL current", robot.MotorL.getCurrentPosition());
@@ -562,7 +562,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
         status = "turn to center";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 600) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 530) {
             robot.MotorL.setPower(-.6 * vl);
             robot.MotorR.setPower(.6 * vr);
             robot.PressServoR.setPosition(1);//in
@@ -578,8 +578,8 @@ public class TwoShootCenterBlue extends LinearOpMode {
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 4500) {
-            robot.MotorL.setPower(.8 * vl);
-            robot.MotorR.setPower(.8 * vr);
+            robot.MotorL.setPower(.95 * vl);
+            robot.MotorR.setPower(.95 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 4500);
             telemetry.update();

@@ -103,7 +103,7 @@ public class TwoCenterRed extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         robot.MotorL.setPower(-.3 * vl);
         robot.MotorR.setPower(-.3 * vr);
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 650) && doneDrive1) {//only does this step if hit white line
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 950) && doneDrive1) {//only does this step if hit white line
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL units to go", robot.MotorL.getCurrentPosition() - startPosL + 650);
             telemetry.addData("MotorL current", robot.MotorL.getCurrentPosition());
@@ -123,7 +123,7 @@ public class TwoCenterRed extends LinearOpMode {
             robot.MotorL.setPower(-.37 * vl);
             robot.MotorR.setPower(.37 * vr);
 
-            if(runtime.seconds() - lastClock > 1.7){
+            /*if(runtime.seconds() - lastClock > 1.7){
                 lastPosL = robot.MotorL.getCurrentPosition();
                 lastPosR = robot.MotorR.getCurrentPosition();
                 lastClock = runtime.seconds();
@@ -136,7 +136,7 @@ public class TwoCenterRed extends LinearOpMode {
                     robot.MotorL.setPower(0);
                     robot.MotorR.setPower(0);
                 }
-            }
+            }*/
             telemetry.addData("lastPosL", lastPosL);
             telemetry.addData("current", robot.MotorL.getCurrentPosition());
             telemetry.addData("turnOneCount", turnOneCount);
@@ -244,7 +244,7 @@ public class TwoCenterRed extends LinearOpMode {
         status = "forward off beacon 1";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 1850) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 850) {
             robot.MotorL.setPower(.6 * vl);
             robot.MotorR.setPower(.6 * vr);
             telemetry.addData("Status:", status);
@@ -257,7 +257,7 @@ public class TwoCenterRed extends LinearOpMode {
         status = "turn to beacon 2";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 1150) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 1250) {
             robot.MotorL.setPower(.5 * vl);
             robot.MotorR.setPower(-.5 * vr);
             robot.PressServoR.setPosition(1);//in
@@ -439,7 +439,7 @@ public class TwoCenterRed extends LinearOpMode {
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
 
-        status = "turn to shoot";
+        status = "turn to center";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 800) {
