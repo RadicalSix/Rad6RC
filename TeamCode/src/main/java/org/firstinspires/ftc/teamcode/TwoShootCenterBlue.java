@@ -84,7 +84,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         status = "drive back until white line";
         shot = 0;
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 4400 && !doneDrive1) {//stop if hit line or go certain distance
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 4500 && !doneDrive1) {//stop if hit line or go certain distance
             if (robot.ColSensor.blue() > 8) {
                 doneDrive1 = true;//hit white line
             }
@@ -246,7 +246,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
         lastPosL = robot.MotorL.getCurrentPosition();
         lastPosR = robot.MotorR.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 300) && !beaconOneDone) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 200) && !beaconOneDone) {
             robot.MotorL.setPower(-.2 * vl);
             robot.MotorR.setPower(-.5 * vr);
 
@@ -355,7 +355,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
         status = "turn to beacon 2";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 600) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 700) {
             robot.MotorL.setPower(-.5 * vl);
             robot.MotorR.setPower(.5 * vr);
             robot.PressServoR.setPosition(1);//in
@@ -562,13 +562,13 @@ public class TwoShootCenterBlue extends LinearOpMode {
         status = "turn to center";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 800) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 600) {
             robot.MotorL.setPower(-.6 * vl);
             robot.MotorR.setPower(.6 * vr);
             robot.PressServoR.setPosition(1);//in
             robot.PressServoL.setPosition(0);//out
             telemetry.addData("Status:", status);
-            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 900);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 600);
             telemetry.update();
         }
         robot.MotorL.setPower(0);
