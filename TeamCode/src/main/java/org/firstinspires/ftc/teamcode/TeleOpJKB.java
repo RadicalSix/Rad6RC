@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.PWMOutput;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Created by Troy on 10/01/16.
  This works
 
  */
